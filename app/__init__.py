@@ -2,9 +2,11 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from config import config
+from flask_migrate import Migrate
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app(config_name):
     # 初始化应用
@@ -14,6 +16,7 @@ def create_app(config_name):
 
     bootstrap.init_app(app)
     db.init_app(app)
+    migrate.init_app(app, db)
 
     # 注册蓝本
     from .main import main as main_blueprint

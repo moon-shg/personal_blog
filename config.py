@@ -1,4 +1,5 @@
 import os
+import mysql.connector
 
 dasedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -21,19 +22,19 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or \
-                              "mysql+pymysql://st:123456@localhost:3306/blog_dev?charset=utf8mb4_unicode_ci"
+                              "mysql+mysqlconnector://st:123456@localhost:3306/blog_dev?charset=utf8"
 
 
 class TestingConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or \
-                              "mysql+pymysql://st:123456@localhost:3306/blog_test?charset=utf8_general_ci"
+                              "mysql+mysqlconnector://st:123456@localhost:3306/blog_test?charset=utf8"
 
 
 class ProductionConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or \
-                              "mysql+pymysql://st:123456@localhost:3306/blog_production?charset=utf8_general_ci"
+                              "mysql+mysqlconnector://st:123456@localhost:3306/blog_production?charset=utf8"
 
 
 config = {
