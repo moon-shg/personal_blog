@@ -3,16 +3,15 @@
 {% block title %}Potato Cookbook{% endblock %}
 
 {% block top %}
-<nav class="navbar navbar-expand-md navbar-light bg-white">
-    <div class="container d-flex justify-content-between">
-    {#        Brand         #}
-        <a class="navbar-brand g-hidden-sm-down" href="#">
-            <img src="static/potato_100px.png" width="30" height="30" class="d-inline-block align-top" alt="">
-            <div class="d-none d-md-inline">Cookbook</div>
+<nav class="navbar navbar-expand-md g-py-18--md navbar-light bg-white">
+    <div class="container d-flex justify-content-between pl-0 pr-3 pr-sm-0">
+        {# Brand #}
+        <a class="navbar-brand g-hidden-sm-down py-0" href="#">
+            <img src="static/logo.png" height="40" class="d-inline-block align-top" alt="">
         </a>
-        {#         Navbar Link          #}
-        <form class="  " >
-            <div class="input-group ">
+        {# Navbar Link #}
+        <form class="g-width-45x--md" >
+            <div class="input-group input-group-lg">
                 <input class="form-control" type="search" placeholder="Search" aria-label="Search">
                 <div class="input-group-append">
                     <button class="btn btn-outline-success my-sm-0" type="submit">
@@ -21,14 +20,18 @@
                 </div>
             </div>
         </form>
+        <div class="d-flex">
+            <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="../static/img/akkarin.jpg" alt="">
+            <span class="align-self-center pl-2 g-hidden-sm-down">登录</span>
         </div>
     </div>
 </nav>
+<hr class="g-brd-gray-light-v4 my-0">
 {% endblock %}
 
 {% block navbar %}
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
-    <div class="container px-2">
+    <div class="container pl-0 pr-3 pr-sm-0">
         {#   logo     #}
         <a class="navbar-brand g-hidden-sm-up p-0" href="/">
             <img src="static/logo.png"  height="30" class="d-inline-block align-top" alt="">
