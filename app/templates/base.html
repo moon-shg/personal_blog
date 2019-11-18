@@ -6,7 +6,7 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white">
     <div class="container d-flex justify-content-between">
     {#        Brand         #}
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand g-hidden-sm-down" href="#">
             <img src="static/potato_100px.png" width="30" height="30" class="d-inline-block align-top" alt="">
             <div class="d-none d-md-inline">Cookbook</div>
         </a>
@@ -29,8 +29,12 @@
 {% block navbar %}
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container px-2">
+        {#   logo     #}
+        <a class="navbar-brand g-hidden-sm-up p-0" href="/">
+            <img src="static/logo.png"  height="30" class="d-inline-block align-top" alt="">
+        </a>
         {#        Toggler/collapsibe Button         #}
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -59,34 +63,56 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-{% block page_content %}{% endblock %}
+<div class="g-py-20 g-py-40--sm">
+    <div class="container border">
+        <div class="row">
+            <div class="col-lg-9 border bg-secondary">
+                {% block articles %}{% endblock %}
+            </div>
+            <div class="col-lg-3 border bg-light">
+                {% block sidebars %}{% endblock %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block footer %}
-<div class="nav bg-light">
-    <div class="container border pt-5 pb-4">
+<div class="nav bg-light border-top">
+    <div class="container pt-5 pb-4">
         <div class="row">
-            <div class="col-sm-6 col-md-4 ">
+            <div class="col-sm-6 col-md-4 mb-2 mb-sm-1">
                 <a class="" href="#">
                     <img src="{{ url_for('static', filename='logo.png') }}" width="150" height="60" class="img-fluid">
                 </a>
             </div>
+            {#      TBD      #}
             <div class="d-none d-sm-block col-md-4"></div>
-            <div class="col-sm-6 col-md-4 border">
-                <p>联系我</p>
+            {#      contact me      #}
+            <div class="col-sm-6 col-md-4">
+                <h6 class="mt-2">联系我</h6>
                 <ul class="list-inline">
-                    <li class="list-inline-item"><span class="rounded-circle color-cyan">
-                        <i class="fa fa-envelope"></i>
+                    <li class="list-inline-item mr-2"><span class="u-icon-v1 u-icon-size--sm u-icon-slide-up--hover g-color-cyan g-bg-cyan-opacity-0_1 rounded-circle"  data-toggle="tooltip" data-placement="top" title="yueshangst@yahoo.com">
+                        <i class="g-font-size-default u-icon__elem-regular fa fa-envelope"></i>
+                        <i class="g-font-size-default u-icon__elem-hover fa fa-envelope"></i>
                     </span></li>
-                    <li class="list-inline-item"><span><i class="fa fa-weixin"></i></span></li>
-                    <li class="list-inline-item"><span><i class="fa fa-qq"></i></span></li>
-                    <li class="list-inline-item"><span><i class="fa fa-weibo"></i></span></li>
-                    <li class="list-inline-item"><span><i class="fa fa-github"></i></span></li>
+                    <li class="list-inline-item mr-2"><span class="u-icon-v1 u-icon-size--sm g-color-green g-bg-green-opacity-0_1 rounded-circle u-icon-slide-up--hover" data-toggle="tooltip" data-placement="top" title="moon-louduan">
+                        <i class="g-font-size-default u-icon__elem-regular fa fa-weixin"></i>
+                        <i class="g-font-size-default u-icon__elem-hover fa fa-weixin"></i>
+                    </span></li>
+                    <li class="list-inline-item mr-2"><span class="u-icon-v1 u-icon-size--sm g-color-blue g-bg-blue-opacity-0_1 rounded-circle u-icon-slide-up--hover" data-toggle="tooltip" data-placement="top" title="393773661">
+                        <i class="g-font-size-default u-icon__elem-regular fa fa-qq"></i>
+                        <i class="g-font-size-default u-icon__elem-hover fa fa-qq"></i>
+                    </span></li>
+                    <li class="list-inline-item mr-2"><a href="https://github.com/moon-shg" class="u-icon-v1 u-icon-size--sm g-color-bluegray g-bg-bluegray-opacity-0_1 rounded-circle u-icon-slide-up--hover" data-toggle="tooltip" data-placement="top" title="moon-louduan">
+                        <i class="g-font-size-default u-icon__elem-regular fa fa-github"></i>
+                        <i class="g-font-size-default u-icon__elem-hover fa fa-github"></i>
+                    </a></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
+
+

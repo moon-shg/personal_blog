@@ -9,8 +9,9 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='potato_100px.png') }}">
     {# icons #}
     <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.css') }}">
-    {#  color  #}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/color.css') }}">
+    {# color #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/core.css') }}">
+
     {% block styles %}
     <!-- Bootstrap CSS -->
     {{ bootstrap.load_css() }}
@@ -29,9 +30,17 @@
 
     {#footer#}
     {% block footer %}{% endblock %}
-    {% block scripts %}
+
     <!-- Optional JavaScript -->
     {{ bootstrap.load_js() }}
-    {% endblock %}
+    {#script#}
+    {% block scripts %}
+     <script>
+        {#Bootstrap - toolstips#}
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+     </script>
+        {% endblock %}
   </body>
 </html>
