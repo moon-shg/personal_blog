@@ -6,7 +6,7 @@
 <nav class="navbar navbar-expand-md g-py-18--md navbar-light bg-white">
     <div class="container d-flex justify-content-between pl-0 pr-3 pr-sm-0">
         {# Brand #}
-        <a class="navbar-brand g-hidden-sm-down py-0" href="#">
+        <a class="navbar-brand g-hidden-sm-down py-0" href="/">
             <img src="static/logo.png" height="40" class="d-inline-block align-top" alt="">
         </a>
         {# Navbar Link #}
@@ -20,10 +20,10 @@
                 </div>
             </div>
         </form>
-        <div class="d-flex">
+        <a class="d-flex" href="{{ url_for('auth.login') }}">
             <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="../static/img/akkarin.jpg" alt="">
             <span class="align-self-center pl-2 g-hidden-sm-down">登录</span>
-        </div>
+        </a>
     </div>
 </nav>
 <hr class="g-brd-gray-light-v4 my-0">
@@ -85,7 +85,7 @@
     <div class="container pt-5 pb-4">
         <div class="row">
             <div class="col-sm-6 col-md-4 mb-2 mb-sm-1">
-                <a class="" href="#">
+                <a class="" href="/">
                     <img src="{{ url_for('static', filename='logo.png') }}" width="150" height="60" class="img-fluid">
                 </a>
             </div>

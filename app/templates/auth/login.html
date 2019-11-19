@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Potato Cookbook - 用户登录{% endblock %}
+
+{% block content %}
+<section class="g-bg-lightblue-radialgradient-circle">
+    <div class="container g-py-50">
+        <div class="row justify-content-between">
+            <div class="col-md-6 col-lg-5 align-self-center">
+                <div class="g-bg-white g-pa-50 rounded">
+                    <header class="text-center mb-4">
+                        <h2 class="g-color-black"><b>用户登录</b></h2>
+                    </header>
+                    {# Login Form #}
+                    <form action="">
+                        {# email #}
+                        <div class="input-group  mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user g-pa-5"></i></span>
+                            </div>
+                            <input id="email" type="text" class="form-control form-control-lg g-pa-15 " name="email" placeholder="邮箱地址" >
+                        </div>
+                        {# password #}
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-lock g-pa-5"></i></span>
+                            </div>
+                            <input id="psd" type="password" class="form-control form-control-lg g-pa-15" name="password" placeholder="密码">
+                        </div>
+                        {# forget psd #}
+                        <div class="d-flex justify-content-between mb-4">
+                            <div class="form-check align-self-center">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input">记住我的登录状态
+                                </label>
+                            </div>
+                            <div>
+                                <a href="#" class="g-font-size-13" style="color:#72c02c;">忘记密码？</a>
+                            </div>
+                        </div>
+                        {# login button #}
+                        <div class="text-center mb-5">
+                            <button id="submit" class="btn btn-block u-btn-primary g-font-size-16 g-py-10 " >登录<span class="fa fa-arrow-circle-right pl-2"></span></button>
+                        </div>
+                        {# divider #}
+                        <div class="text-center g-pos-rel g-mb-50">
+                            <div class="d-inline-block g-width-200 g-height-1 border-bottom"></div>
+                            <span class="rounded-circle u-icon-size--lg u-icon-v2 g-brd-gray-light-v3 g-absolute-centered g-color-gray-dark-v4 g-bg-white g-font-size-default g-pa-24 ">或</span>
+                        </div>
+                        {# Github & Weibo login #}
+                        <div class="d-flex justify-content-center mb-4">
+                            <a href="#">
+                                <button class="btn u-btn-outline-bluegray rounded g-py-13 g-px-30 mr-1"><span class="fa fa-github mr-1"></span>GITHUB</button>
+                            </a>
+                            <a href="#">
+                                <button class="btn u-btn-outline-lightred rounded g-py-13 g-px-30 mr-1"><span class="fa fa-weibo mr-1"></span>WEIBO</button>
+                            </a>
+                        </div>
+                    </form>
+                    {# footer #}
+                    <footer class="d-flex justify-content-center">
+                        <p class="g-color-gray-dark-v5">还没有账户？</p><a href="#">点击注册</a>
+                    </footer>
+                </div>
+            </div>
+            <div class="col-md-6 ">asdfadfa</div>
+        </div>
+    </div>
+</section>
+{% endblock %}
