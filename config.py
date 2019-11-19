@@ -27,13 +27,12 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
-    DEBUG = True
+    TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or \
                               "mysql+mysqlconnector://st:123456@localhost:3306/blog_test?charset=utf8"
 
 
 class ProductionConfig(Config):
-    DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or \
                               "mysql+mysqlconnector://st:123456@localhost:3306/blog_production?charset=utf8"
 
