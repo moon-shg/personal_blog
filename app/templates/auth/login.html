@@ -19,7 +19,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-user g-pa-5"></i></span>
                             </div>
-                            {{ form.email(class='form-control form-control-lg g-pa-15', placeholder="邮箱地址") }}
+                            {{ form.email(class='form-control form-control-lg g-py-20 g-font-size-13', placeholder="邮箱地址") }}
 {#                            <input id="email" type="text" class="form-control form-control-lg g-pa-15 " name="email" placeholder="邮箱地址" >#}
                         </div>
                         {# password #}
@@ -27,15 +27,18 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-lock g-pa-5"></i></span>
                             </div>
-                            {{ form.password(class='form-control form-control-lg g-pa-15', placeholder="密码") }}
+                            {{ form.password(class='form-control form-control-lg g-py-20 g-font-size-13', placeholder="密码") }}
 {#                            <input id="psd" type="password" class="form-control form-control-lg g-pa-15" name="password" placeholder="密码">#}
                         </div>
                         {# forget psd #}
                         <div class="d-flex justify-content-between mb-4">
-                            <div class="form-check align-self-center">
-                                <label class="form-check-label">
-                                    {{ form.remember_me(type="checkbox", class="form-check-input") }}记住我的登录状态
+                            <div class="form-check align-self-center pl-0">
+                                <label class="form-check-inline u-check g-color-gray-dark-v5 g-font-size-13 g-pl-25">记住我的登录状态
+                                    {{ form.remember_me(type="checkbox", class="invisible g-pos-abs g-top-0 g-left-0") }}
 {#                                    <input type="checkbox" class="form-check-input">记住我的登录状态#}
+                                    <span class="d-block u-check-icon-checkbox-v6 g-absolute-centered--y g-left-0">
+                                        <i class="fa" data-check-icon="&#xF00C;"></i>
+                                    </span>
                                 </label>
                             </div>
                             <div>
