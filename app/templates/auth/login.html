@@ -12,26 +12,30 @@
                         <h2 class="g-color-black"><b>用户登录</b></h2>
                     </header>
                     {# Login Form #}
-                    <form action="">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
                         {# email #}
                         <div class="input-group  mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-user g-pa-5"></i></span>
                             </div>
-                            <input id="email" type="text" class="form-control form-control-lg g-pa-15 " name="email" placeholder="邮箱地址" >
+                            {{ form.email(class='form-control form-control-lg g-pa-15', placeholder="邮箱地址") }}
+{#                            <input id="email" type="text" class="form-control form-control-lg g-pa-15 " name="email" placeholder="邮箱地址" >#}
                         </div>
                         {# password #}
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-lock g-pa-5"></i></span>
                             </div>
-                            <input id="psd" type="password" class="form-control form-control-lg g-pa-15" name="password" placeholder="密码">
+                            {{ form.password(class='form-control form-control-lg g-pa-15', placeholder="密码") }}
+{#                            <input id="psd" type="password" class="form-control form-control-lg g-pa-15" name="password" placeholder="密码">#}
                         </div>
                         {# forget psd #}
                         <div class="d-flex justify-content-between mb-4">
                             <div class="form-check align-self-center">
                                 <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input">记住我的登录状态
+                                    {{ form.remember_me(type="checkbox", class="form-check-input") }}记住我的登录状态
+{#                                    <input type="checkbox" class="form-check-input">记住我的登录状态#}
                                 </label>
                             </div>
                             <div>
@@ -40,7 +44,8 @@
                         </div>
                         {# login button #}
                         <div class="text-center mb-5">
-                            <button id="submit" class="btn btn-block u-btn-primary g-font-size-16 g-py-10 " >登录<span class="fa fa-arrow-circle-right pl-2"></span></button>
+                            {{ form.submit(id="submit", class="btn btn-block u-btn-primary g-font-size-16 g-py-10") }}
+{#                            <button id="submit" class="btn btn-block u-btn-primary g-font-size-16 g-py-10" >登录<span class="fa fa-arrow-circle-right pl-2"></span></button>#}
                         </div>
                         {# divider #}
                         <div class="text-center g-pos-rel g-mb-50">
