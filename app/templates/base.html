@@ -65,6 +65,20 @@
 </nav>
 {% endblock %}
 
+
+{# flash message #}
+{% block flash %}
+<div class="container">
+    {% for massage in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ massage }}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+{# end flash message #}
+
 {% block content %}
 <div class="g-py-20 g-py-40--sm">
     <div class="container border">
