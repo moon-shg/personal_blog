@@ -1,5 +1,6 @@
-from . import db
+from . import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
 
 # 用户组
@@ -14,7 +15,8 @@ class Role(db.Model):
 
 
 # 用户
-class User(db.Model):
+# 通过添加父类UserMixin,来继承Flask_login的一些属性和方法（如：is_authenticated, is_active, is_anonymous 和 get_id()）
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, index=True)
@@ -37,3 +39,9 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<用户名：{self.username}>'
+
+
+# Flask-login 加载用户
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
