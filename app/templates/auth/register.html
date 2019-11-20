@@ -1,0 +1,25 @@
+{% extends "auth/login.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css')}}">
+{% endblock %}
+
+{% block title %}Potato Cookbook - 用户注册{% endblock %}
+
+{% block left_side %}
+    <div class="col-md-6 col-lg-5 align-self-center mb-5">
+        <div class="g-bg-white g-pa-50 rounded">
+            <header class="text-center mb-4">
+                <h2 class="g-color-black"><b>用户注册</b></h2>
+            </header>
+            {# Register Form #}
+            {{ wtf.quick_form(form) }}
+            {# footer #}
+            <footer class="d-flex justify-content-center">
+                <p class="g-color-gray-dark-v5">还没有账户？</p><a href="#">点击注册</a>
+            </footer>
+        </div>
+    </div>
+{% endblock %}

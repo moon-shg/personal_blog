@@ -7,7 +7,7 @@
     <div class="container d-flex justify-content-between pl-0 pr-3 pr-sm-0">
         {# Brand #}
         <a class="navbar-brand g-hidden-sm-down py-0" href="/">
-            <img src="static/logo.png" height="40" class="d-inline-block align-top" alt="">
+            <img src="{{ url_for('static', filename='logo.png') }}" height="40" class="d-inline-block align-top" alt="">
         </a>
         {# Search Bar #}
         <form class="g-width-60x g-width-45x--md" >

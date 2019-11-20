@@ -1,0 +1,11 @@
+label{
+    display: inline-block;
+    margin-bottom: .5rem;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+p.help-block{
+    font-weight: lighter;
+    color: #dc3545;
+}
