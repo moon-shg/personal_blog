@@ -9,8 +9,8 @@
         <a class="navbar-brand g-hidden-sm-down py-0" href="/">
             <img src="static/logo.png" height="40" class="d-inline-block align-top" alt="">
         </a>
-        {# Navbar Link #}
-        <form class="g-width-45x--md" >
+        {# Search Bar #}
+        <form class="g-width-60x g-width-45x--md" >
             <div class="input-group input-group-lg">
                 <input class="form-control" type="search" placeholder="Search" aria-label="Search">
                 <div class="input-group-append">
@@ -20,10 +20,20 @@
                 </div>
             </div>
         </form>
-        <a class="d-flex" href="{{ url_for('auth.login') }}">
-            <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="../static/img/akkarin.jpg" alt="">
-            <span class="align-self-center pl-2 g-hidden-sm-down">登录</span>
-        </a>
+        {# Avatar #}
+        {% block avatar %}
+            {% if current_user.is_authenticated %}
+                <a class="d-flex text-decoration-none" href="{{ url_for('auth.logout') }}">
+                    <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="../static/img/avatar/akkarin.jpg" alt="">
+                    <span class="align-self-center pl-2 g-hidden-sm-down">{{ current_user.username }}</span>
+                </a>
+            {% else %}
+                <a class="d-flex text-decoration-none" href="{{ url_for('auth.login') }}">
+                    <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="../static/img/avatar/akkarin.jpg" alt="">
+                    <span class="align-self-center pl-2 g-hidden-sm-down">登录</span>
+                </a>
+            {% endif %}
+        {% endblock %}
     </div>
 </nav>
 <hr class="g-brd-gray-light-v4 my-0">
@@ -31,7 +41,7 @@
 
 {% block navbar %}
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
-    <div class="container pl-0 pr-3 pr-sm-0">
+    <div class="container d-flex justify-content-between pl-0 pr-3 pr-sm-0">
         {#   logo     #}
         <a class="navbar-brand g-hidden-sm-up p-0" href="/">
             <img src="static/logo.png"  height="30" class="d-inline-block align-top" alt="">

@@ -2,7 +2,7 @@ from . import auth
 from flask import render_template, request, redirect, url_for, flash
 from .forms import LoginForm
 from ..models import User
-from flask_login import login_user
+from flask_login import login_user, login_required, logout_user
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -19,3 +19,11 @@ def login():
             return redirect(next)
         flash('邮箱或密码错误！')
     return render_template('auth/login.html', form=form)
+
+
+@auth.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('已退出登录，欢迎下次再来~')
+    return redirect(url_for('main.index'))
