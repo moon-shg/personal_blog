@@ -6,7 +6,8 @@
 <section class="g-bg-lightblue-radialgradient-circle">
     <div class="container g-py-50">
         <div class="row justify-content-between">
-            <div class="col-md-6 col-lg-5 align-self-center">
+            {# left side #}
+            <div class="col-md-6 col-lg-5 align-self-center mb-5">
                 <div class="g-bg-white g-pa-50 rounded">
                     <header class="text-center mb-4">
                         <h2 class="g-color-black"><b>用户登录</b></h2>
@@ -47,7 +48,7 @@
                         </div>
                         {# login button #}
                         <div class="text-center mb-5">
-                            {{ form.submit(id="submit", class="btn btn-block u-btn-primary g-font-size-16 g-py-10") }}
+                            {{ form.submit(id="submit", class="btn btn-block u-btn-primary g-font-size-16 g-py-10", value="登录") }}
 {#                            <button id="submit" class="btn btn-block u-btn-primary g-font-size-16 g-py-10" >登录<span class="fa fa-arrow-circle-right pl-2"></span></button>#}
                         </div>
                         {# divider #}
@@ -71,7 +72,41 @@
                     </footer>
                 </div>
             </div>
-            <div class="col-md-6 ">asdfadfa</div>
+            {# right side #}
+            <div class="col-md-6 align-self-center">
+                {# welcome msg #}
+                <div class="mb-5 px-2">
+                    <h3 class="g-font-weight-600">Welcome!<br>注册会员，掌握更多土豆烹饪技巧</h3>
+                </div>
+                <div class="row">
+                    <div class="col-md-11 col-lg-9">
+                        {# lemon & book #}
+                        <div class="media mb-3">
+                            <span class="align-self-center u-icon-v1 u-icon-size--lg g-color-yellow"><i class="fa fa-lemon-o"></i></span>
+                            <div class="media-body align-self-center ml-3">
+                                <p class="g-color-gray-dark-v5 g-color-gray-dark-v4--hover g-font-size-16 my-0" >这里有更新鲜的食材</p>
+                            </div>
+                        </div>
+                        <div class="media mb-4">
+                            <span class="align-self-center u-icon-v1 u-icon-size--lg g-color-primary"><i class="fa fa-book"></i></span>
+                            <div class="media-body align-self-center ml-3">
+                                <p class="g-color-gray-dark-v5 g-color-gray-dark-v4--hover g-font-size-16 my-0" >这里有更实用的烹饪技巧</p>
+                            </div>
+                        </div>
+                        {# blockqoute #}
+                        <blockqoute class="d-block w-100 u-blockquote-v1 g-color-gray-dark-v5 g-color-gray-dark-v4--hover g-rounded-15 g-py-25 g-pl-60 g-mb-40">花径不曾缘客扫,蓬门今始为君开。
+                        </blockqoute>
+                        {# Mr.Mooon #}
+                        <div class="media ml-4">
+                            <img class="img-fluid align-self-center g-width-45 g-height-45 g-brd-around g-brd-gray-light-v1 rounded-circle" src="../static/img/avatar/mio.jpg" alt="">
+                            <div class="media-body align-self-center pl-2">
+                                <h5 class="my-0 g-font-size-15 g-font-weight-600">Mr.Mooon</h5>
+                                <p class="my-0 g-font-size-13 g-color-gray-dark-v5">Executive Chef</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
