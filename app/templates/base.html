@@ -23,10 +23,20 @@
         {# Avatar #}
         {% block avatar %}
             {% if current_user.is_authenticated %}
-                <a class="d-flex text-decoration-none" href="{{ url_for('auth.logout') }}">
-                    <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="../static/img/avatar/akkarin.jpg" alt="">
-                    <span class="align-self-center pl-2 g-hidden-sm-down">{{ current_user.username }}</span>
-                </a>
+                <div class="dropdown">
+                    <a class="d-flex text-decoration-none dropdown-toggle g-pl-25 g-pl-0--sm" href="#" data-toggle="dropdown">
+                        <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="{{ url_for('static', filename="img/avatar/akkarin.jpg")}}" alt="">
+                        <span class="align-self-center pl-2 g-hidden-sm-down">{{ current_user.username }}</span>
+                    </a>
+                    <div class="dropdown-menu text-center g-min-width-100x animated fadeIn">
+                        <a class="dropdown-item g-color-gray-dark-v4 g-color-aqua--hover" href="#">个人资料</a>
+                        <a class="dropdown-item g-color-gray-dark-v4 g-color-aqua--hover" href="#">我的收藏</a>
+                        <a class="dropdown-item g-color-gray-dark-v4 g-color-aqua--hover" href="{{ url_for('auth.change_password') }}">修改密码</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item g-color-gray-dark-v4 g-color-aqua--hover" href="{{ url_for('auth.logout') }}">注销登录</a>
+                    </div>
+                </div>
+
             {% else %}
                 <a class="d-flex text-decoration-none" href="{{ url_for('auth.login') }}">
                     <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="../static/img/avatar/akkarin.jpg" alt="">
@@ -44,7 +54,7 @@
     <div class="container d-flex justify-content-between pl-0 pr-3 pr-sm-0">
         {#   logo     #}
         <a class="navbar-brand g-hidden-sm-up p-0" href="/">
-            <img src="static/logo.png"  height="30" class="d-inline-block align-top" alt="">
+            <img src="{{ url_for('static', filename='logo.png') }}"  height="30" class="d-inline-block align-top" alt="">
         </a>
         {#        Toggler/collapsibe Button         #}
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
