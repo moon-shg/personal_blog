@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Potato Cookbook - 用户登录{% endblock %}
+
+{% block content %}
+<section class="g-bg-lightblue-radialgradient-circle">
+    <div class="container g-py-50">
+        <div class="row justify-content-between">
+            {# left side #}
+            {% block left_side %}
+            <div class="col-md-6 col-lg-5 align-self-center mb-5">
+                <div class="g-bg-white g-pa-50 rounded">
+                    <header class="text-center mb-4">
+                        <h2 class="g-color-black"><b>用户登录</b></h2>
+                    </header>
+                    {# Login Form #}
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        {# email #}
+                        <div class="input-group  mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user g-pa-5"></i></span>
+                            </div>
+                            {{ form.email(class='form-control form-control-lg g-py-20 g-font-size-13', placeholder="邮箱地址") }}
+{#                            <input id="email" type="text" class="form-control form-control-lg g-pa-15 " name="email" placeholder="邮箱地址" >#}
+                        </div>
+                        {# password #}
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-lock g-pa-5"></i></span>
+                            </div>
+                            {{ form.password(class='form-control form-control-lg g-py-20 g-font-size-13', placeholder="密码") }}
+{#                            <input id="psd" type="password" class="form-control form-control-lg g-pa-15" name="password" placeholder="密码">#}
+                        </div>
+                        {# forget psd #}
+                        <div class="d-flex justify-content-between mb-4">
+                            <div class="form-check align-self-center pl-0">
+                                <label class="form-check-inline u-check g-color-gray-dark-v5 g-font-size-13 g-pl-25">记住我的登录状态
+                                    {{ form.remember_me(type="checkbox", class="invisible g-pos-abs g-top-0 g-left-0") }}
+{#                                    <input type="checkbox" class="form-check-input">记住我的登录状态#}
+                                    <span class="d-block u-check-icon-checkbox-v6 g-absolute-centered--y g-left-0">
+                                        <i class="fa" data-check-icon="&#xF00C;"></i>
+                                    </span>
+                                </label>
+                            </div>
+                            <div>
+                                <a href="{{ url_for('auth.password_reset_request') }}" class="g-font-size-13" style="color:#72c02c;">忘记密码？</a>
+                            </div>
+                        </div>
+                        {# login button #}
+                        <div class="text-center mb-5">
+                            {{ form.submit(id="submit", class="btn btn-block u-btn-primary g-font-size-16 g-py-10", value="登录") }}
+{#                            <button id="submit" class="btn btn-block u-btn-primary g-font-size-16 g-py-10" >登录<span class="fa fa-arrow-circle-right pl-2"></span></button>#}
+                        </div>
+                        {# divider #}
+                        <div class="text-center g-pos-rel g-mb-50">
+                            <div class="d-inline-block g-width-200 g-height-1 border-bottom"></div>
+                            <span class="rounded-circle u-icon-size--lg u-icon-v2 g-brd-gray-light-v3 g-absolute-centered g-color-gray-dark-v4 g-bg-white g-font-size-default g-pa-24 ">或</span>
+                        </div>
+                        {# Github & Weibo login #}
+                        <div class="d-flex justify-content-center mb-4">
+                            <a href="#">
+                                <button class="btn u-btn-outline-bluegray rounded g-py-13 g-px-30 mr-1"><span class="fa fa-github mr-1"></span>GITHUB</button>
+                            </a>
+                            <a href="#">
+                                <button class="btn u-btn-outline-lightred rounded g-py-13 g-px-30 mr-1"><span class="fa fa-weibo mr-1"></span>WEIBO</button>
+                            </a>
+                        </div>
+                    </form>
+                    {# footer #}
+                    <footer class="d-flex justify-content-center">
+                        <p class="g-color-gray-dark-v5">还没有账户？</p><a href="{{ url_for('auth.register') }}">点击注册</a>
+                    </footer>
+                </div>
+            </div>
+            {% endblock %}
+            {# right side #}
+            {% block right_side %}
+            <div class="col-md-6 align-self-center g-pb-60--sm">
+                {# welcome msg #}
+                <div class="mb-5 px-2">
+                    <h3 class="g-font-weight-600">Welcome!<br>注册会员，掌握更多土豆烹饪技巧</h3>
+                </div>
+                <div class="row">
+                    <div class="col-md-11 col-lg-9">
+                        {# lemon & book #}
+                        <div class="media mb-3">
+                            <span class="align-self-center u-icon-v1 u-icon-size--lg g-color-yellow"><i class="fa fa-lemon-o"></i></span>
+                            <div class="media-body align-self-center ml-3">
+                                <p class="g-color-gray-dark-v5 g-color-gray-dark-v4--hover g-font-size-16 my-0" >这里有更新鲜的食材</p>
+                            </div>
+                        </div>
+                        <div class="media mb-4">
+                            <span class="align-self-center u-icon-v1 u-icon-size--lg g-color-primary"><i class="fa fa-book"></i></span>
+                            <div class="media-body align-self-center ml-3">
+                                <p class="g-color-gray-dark-v5 g-color-gray-dark-v4--hover g-font-size-16 my-0" >这里有更实用的烹饪技巧</p>
+                            </div>
+                        </div>
+                        {# blockqoute #}
+                        <blockqoute class="d-block w-100 u-blockquote-v1 g-color-gray-dark-v5 g-color-gray-dark-v4--hover g-rounded-15 g-py-25 g-pl-60 g-mb-40">花径不曾缘客扫,蓬门今始为君开。
+                        </blockqoute>
+                        {# Mr.Mooon #}
+                        <div class="media ml-4">
+                            <img class="img-fluid align-self-center g-width-45 g-height-45 g-brd-around g-brd-gray-light-v1 rounded-circle" src="../static/img/avatar/mio.jpg" alt="">
+                            <div class="media-body align-self-center pl-2">
+                                <h5 class="my-0 g-font-size-15 g-font-weight-600">Mr.Mooon</h5>
+                                <p class="my-0 g-font-size-13 g-color-gray-dark-v5">Executive Chef</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+</section>
+{% endblock %}

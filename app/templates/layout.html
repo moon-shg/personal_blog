@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% block head %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='potato_100px.png') }}">
+    {# font-awesome icons #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.css') }}">
+    {% block styles %}
+    <!-- Bootstrap CSS -->
+    {{ bootstrap.load_css() }}
+    {# core.css #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/core.css') }}">
+    {# animate #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+    {# custom.css #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+
+    {% endblock %}
+
+    <title>{% block title %}Your page title{% endblock %}</title>
+    {% endblock %}
+  </head>
+  <body>
+    {#page-top#}
+    {% block top %}{% endblock %}
+    {% block navbar %}{% endblock %}
+    {#flash#}
+    {% block flash %}{% endblock %}
+    {#content#}
+    {% block content %}
+    {% endblock %}
+
+    {#footer#}
+    {% block footer %}{% endblock %}
+
+    <!-- Optional JavaScript -->
+    {{ bootstrap.load_js() }}
+    {#script#}
+    {% block scripts %}
+     <script>
+        {#Bootstrap - toolstips#}
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+     </script>
+        {% endblock %}
+  </body>
+</html>

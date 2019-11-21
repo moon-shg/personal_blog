@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Potato Cookbook - 验证邮箱</title>
+</head>
+<body>
+<div class="container">
+    <article>
+        <p>你好,{{ user.username }}!</p><br>
+        <p>欢迎加入 Potato Cookbook !</p><br>
+        <p>请点击下面链接来验证你的邮箱：</p>
+        <p>{{ url_for('auth.confirm', token=token, _external=True) }}"</p><br>
+        <p>—— Executive Chef Mr.Mooon</p>
+    </article>
+</div>
+</body>
+</html>
