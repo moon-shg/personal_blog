@@ -3,6 +3,7 @@ from flask import current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from datetime import datetime
 
 
 # 用户组权限
@@ -87,6 +88,13 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     confirmed = db.Column(db.Boolean, default=False)
+    # 个人资料
+    name = db.Column(db.Unicode(64))
+    location = db.Column(db.Unicode(64))
+    gender = db.Column(db.Boolean)
+    about_me = db.Column(db.UnicodeText())
+    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
 
     # 创建用户时，设置默认用户组
     def __init__(self, **kwargs):
@@ -153,6 +161,13 @@ class User(db.Model, UserMixin):
 
     def is_administrator(self):
         return self.role.has_permission(Permission.ADMIN)
+
+    # 登录时，刷新last_seen属性 (另见auth/views.py)
+    def refresh_last_seen(self):
+        self.last_seen = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
+
 
     def __repr__(self):
         return f'<用户名：{self.username}>'

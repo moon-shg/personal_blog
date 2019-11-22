@@ -117,3 +117,10 @@ def password_reset(token):
         else:
             flash('')
     return render_template('auth/reset_password.html', form=form, render_type=render_type)
+
+
+# 更新已登录用户的 last_seen 属性
+@auth.before_app_request   # 使得程序会在每次请求前执行
+def before_request():
+    if current_user.is_authenticated:
+        current_user.refresh_last_seen()

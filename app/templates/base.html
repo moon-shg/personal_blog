@@ -29,7 +29,7 @@
                         <span class="align-self-center pl-2 g-hidden-sm-down">{{ current_user.username }}</span>
                     </a>
                     <div class="dropdown-menu text-center g-min-width-100x animated fadeIn">
-                        <a class="dropdown-item g-color-gray-dark-v4 g-color-aqua--hover" href="#">个人资料</a>
+                        <a class="dropdown-item g-color-gray-dark-v4 g-color-aqua--hover" href="{{ url_for('user_page.user', username=current_user.username) }}">个人资料</a>
                         <a class="dropdown-item g-color-gray-dark-v4 g-color-aqua--hover" href="#">我的收藏</a>
                         <a class="dropdown-item g-color-gray-dark-v4 g-color-aqua--hover" href="{{ url_for('auth.change_password') }}">修改密码</a>
                         <div class="dropdown-divider"></div>
