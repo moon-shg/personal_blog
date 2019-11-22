@@ -101,14 +101,16 @@
 
 {% block content %}
 <div class="g-py-20 g-py-40--sm">
-    <div class="container border">
+    <div class="container">
         <div class="row">
+        {% block page_content %}
             <div class="col-lg-9 border bg-secondary">
                 {% block articles %}{% endblock %}
             </div>
             <div class="col-lg-3 border bg-light">
                 {% block sidebars %}{% endblock %}
             </div>
+        {% endblock page_content %}
         </div>
     </div>
 </div>

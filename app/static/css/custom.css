@@ -2,3 +2,7 @@
 .dropdown-toggle::after{
     content: "";
 }
+
+#user_profile a{
+    color: #777777 ;
+}
