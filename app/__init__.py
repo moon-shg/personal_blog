@@ -4,10 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 from config import config
 from flask_mail import Mail
 from flask_login import LoginManager
+from flask_moment import Moment
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 mail = Mail()
+moment = Moment()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'  # 设置登录页面的 endpiont
 
@@ -22,6 +24,7 @@ def create_app(config_name):
     db.init_app(app)
     mail.init_app(app)
     login_manager.init_app(app)
+    moment.init_app(app)
 
     # 注册蓝本
     from .main import main as main_blueprint

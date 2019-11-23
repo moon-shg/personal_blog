@@ -2,3 +2,30 @@
 
 {% block title %}Potato Cookbook - 主页{% endblock %}
 
+{% block articles %}
+{# posts list #}
+<div class="">
+    <ul class="">
+        {% for post in posts %}
+        <li class="post">
+            <div class=""> <h3>{{ post.title }}</h3></div>
+            <div><p>{{ post.summary }}</p></div>
+            <div><p>{{ post.author.username }}</p></div>
+            <div><p>{{ moment(post.timestamp).fromNow() }}</p></div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{# post editor #}
+<div>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-row mb-2">
+            <div class="col-md-4">{{ form.title(class="form-control", placeholder="标题") }}</div>
+            <div class="col-md-8">{{ form.summary(class="form-control", placeholder="文章概述") }}</div>
+        </div>
+        <div class="mb-4">{{ form.body }}</div>
+        <div class="text-center" >{{ form.submit(class="btn u-btn-primary") }}</div>
+    </form>
+</div>
+{% endblock articles %}

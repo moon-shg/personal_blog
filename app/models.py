@@ -202,5 +202,8 @@ class Post(db.Model):
     body = db.Column(db.UnicodeText)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
-    author_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def __repr__(self):
+        return f'<文章：{self.title}>'
 
