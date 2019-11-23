@@ -56,12 +56,12 @@
                         </div>
                             <div class="row mx-5">
                                 <div class="col-sm-6"><p>真实姓名：{% if user.name %}  {{ user.name }}
-                                    {% else %} <a href="" class="g-color-primary--hover"><span><i class="fa fa-pencil-square-o"></i>马上填写</span></a> {% endif %}</p></div>
+                                    {% else %} {% if not current_user.is_administrator() %} <a href="{{ url_for('user_page.edit_profile') }}" class="g-color-primary--hover"><span><i class="fa fa-pencil-square-o"></i>马上填写</span></a> {% endif %}{% endif %}</p></div>
                                 <div class="col-sm-6"><p>性别：{{ '男' if user.gender else '女' }}</p></div>
                             </div>
                             <div class="row mx-5">
                                 <div class="col-12"><p>地址：{% if user.location %} {{ user.location }}
-                                    {% else %} <a href="" class="g-color-primary--hover"><span><i class="fa fa-pencil-square-o g-color-primary--hover"></i>马上填写</span></a> {% endif %}</p></div>
+                                    {% else %} {% if not current_user.is_administrator() %}<a href="{{ url_for('user_page.edit_profile') }}" class="g-color-primary--hover"><span><i class="fa fa-pencil-square-o g-color-primary--hover"></i>马上填写</span></a>{% endif %} {% endif %}</p></div>
                             </div>
                             <div class="row mx-5">
                                 <div class="col-sm-6"><p>注册时间：{{ user.member_since }}</p></div>
@@ -69,15 +69,15 @@
                             </div>
                             <div class="row mx-5 overflow-auto" style="max-height: 87px">
                                 <div class="col-12"><p>个人简介：{% if user.about_me %} {{ user.about_me }}
-                                    {% else %}你还没有填写个人简介诶 -_-||&nbsp;&nbsp; <a href="" class="g-color-primary--hover"><span><i class="fa fa-pencil-square-o"></i>马上填写</span></a> {% endif %}</p></div>
+                                    {% else %}你还没有填写个人简介诶 -_-||&nbsp;&nbsp; {% if not current_user.is_administrator() %}<a href="{{ url_for('user_page.edit_profile') }}" class="g-color-primary--hover"><span><i class="fa fa-pencil-square-o"></i>马上填写</span></a> {% endif %}{% endif %}</p></div>
                             </div>
                         </div>
                         <footer class="d-flex justify-content-center mt-4 mb-5 ">
                             {% if current_user.is_administrator() %}
-                            <a href="#" class="btn btn-xl g-color-red g-color-white--hover u-btn-outline-red u-btn-hover-v2-2 g-rounded-50" role="button" >
+                            <a href="{{ url_for('user_page.edit_profile_admin', id=user.id) }}" class="btn btn-xl g-color-red g-color-white--hover u-btn-outline-red u-btn-hover-v2-2 g-rounded-50" role="button" >
                                 <span> &nbsp;编辑个人资料(管理员) <i class="fa fa-edit g-font-size-24 float-left"></i></span>
                             </a>
-                            {% else %}
+                            {% elif user == current_user %}
                             <a href="{{ url_for('user_page.edit_profile') }}" class="btn btn-xl g-color-primary g-color-white--hover u-btn-outline-primary u-btn-hover-v2-2 g-rounded-50" role="button" >
                                 <span> &nbsp;编辑个人资料 <i class="fa fa-edit g-font-size-24 float-left"></i></span>
                             </a>

@@ -91,7 +91,7 @@ class User(db.Model, UserMixin):
     # 个人资料
     name = db.Column(db.Unicode(64))
     location = db.Column(db.Unicode(64))
-    gender = db.Column(db.Boolean)
+    gender = db.Column(db.Boolean, default=True)
     about_me = db.Column(db.UnicodeText())
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
