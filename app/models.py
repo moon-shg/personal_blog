@@ -95,6 +95,8 @@ class User(db.Model, UserMixin):
     about_me = db.Column(db.UnicodeText())
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+    # 博客
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     # 创建用户时，设置默认用户组
     def __init__(self, **kwargs):
@@ -189,3 +191,16 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+# 博客
+class Post(db.Model):
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
+    summary = db.Column(db.UnicodeText)
+    body = db.Column(db.UnicodeText)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    views = db.Column(db.Integer, default=0)
+    author_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+
