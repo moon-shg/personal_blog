@@ -206,6 +206,13 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+
+    # 创建博客时，设置默认分类
+    def __int__(self, **kwargs):
+        super(Post, self).__init__(**kwargs)
+        if self.category is None:
+            self.category = Category.queyr.filter_by(default=True).first()
 
     # 在服务器端将post.body中的markdown文本转换成html格式
     @staticmethod
@@ -219,11 +226,10 @@ class Post(db.Model):
             'abbr': ['title'],
             'acronym': ['title'],
             'img': ['src', 'alt', 'title', 'width', 'height']
-            }
+        }
         target.body_html = bleach.linkify(bleach.clean(
             markdown(value, output_format='html'),
             tags=allowed_tags, attributes=allowed_attr, strip=True))
-
 
     def __repr__(self):
         return f'<文章：{self.title}>'
@@ -231,3 +237,24 @@ class Post(db.Model):
 
 # SQLAlchemy ‘set’事件监听程序，当body字段设了新值，函数就会自动被调用。
 db.event.listen(Post.body, 'set', Post.on_changed_body)
+
+
+# 博客文章分类
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), unique=True)
+    default = db.Column(db.Boolean, default=False)
+    posts = db.relation('posts', backref='category', lazy='dynamic')
+
+    # 添加文章分类
+    @staticmethod
+    def add_category(new_category):
+        category = Category.query.filter_by(name=new_category).first()
+        if category is None:
+            category = Category(name=new_category)
+            db.session.add(category)
+            db.session.commit()
+
+    def __repr__(self):
+        return f'<文章分类： {self.name}>'
