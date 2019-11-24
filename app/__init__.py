@@ -36,4 +36,7 @@ def create_app(config_name):
     from .user import user_page as user_page_blueprint
     app.register_blueprint(user_page_blueprint, url_prefix='/user')
 
+    from .blog import blog as blog_blueprint
+    app.register_blueprint(blog_blueprint, url_prefix='/blog')
+
     return app

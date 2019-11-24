@@ -4,23 +4,12 @@
 
 {% block articles %}
 {# posts list #}
-<div class="">
-    <ul class="">
-        {% for post in posts %}
-        <li class="post">
-            <div class=""> <h3>{{ post.title }}</h3></div>
-            <div><p>{{ post.summary }}</p></div>
-            <div><p>{{ post.author.username }}</p></div>
-            <div><p>{{ moment(post.timestamp).fromNow() }}</p></div>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
+{% include "_post.html" %}
 {# post editor #}
 <div class="u-heading-v3-1 g-mb-30">
 <h4 class="u-heading-v3__title g-color-primary g-brd-primary">发表文章</h4>
 </div>
-<div>
+<div class="mb-5">
     {% if current_user.can(Permission.WRITE) %}
         <form method="post">
             {{ form.hidden_tag() }}
@@ -29,9 +18,10 @@
                 <div class="col-md-8">{{ form.summary(class="form-control", placeholder="文章概述") }}</div>
             </div>
             <div class="mb-4">{{ form.body }}</div>
-            <div class="text-center" >{{ form.submit(class="btn u-btn-primary") }}</div>
+            <div class="text-center" >{{ form.submit(class="btn btn-lg u-btn-primary") }}</div>
         </form>
     {% else %}
+{#TODO: move editor button to article page #}
         <div class="d-flex justify-content-between mt-4 mb-5 ">
             <a href="{{ url_for('auth.login') }}" class="btn btn-lg g-color-indigo g-font-size-15 g-color-white--hover u-btn-outline-indigo u-btn-hover-v1-4 g-rounded-50" role="button">
                 <span> &nbsp;编辑框登录后可见 <i class="fa fa-edit g-font-size-18 float-left g-mt-3"></i></span>

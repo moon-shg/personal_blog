@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block title %}Potato Cookbook - {{ posts[0].title }} {% endblock %}
+
+{% block articles %}
+    {% include "_post.html" %}
+{% endblock articles %}

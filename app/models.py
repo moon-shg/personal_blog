@@ -4,6 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from datetime import datetime
+from markdown import markdown
+import bleach
 
 
 # 用户组权限
@@ -170,7 +172,6 @@ class User(db.Model, UserMixin):
         db.session.add(self)
         db.session.commit()
 
-
     def __repr__(self):
         return f'<用户名：{self.username}>'
 
@@ -187,6 +188,7 @@ class AnonymousUser(AnonymousUserMixin):
 
 login_manager.anonymous_user = AnonymousUser
 
+
 # Flask-login 加载用户
 @login_manager.user_loader
 def load_user(user_id):
@@ -200,10 +202,32 @@ class Post(db.Model):
     title = db.Column(db.String(255))
     summary = db.Column(db.UnicodeText)
     body = db.Column(db.UnicodeText)
+    body_html = db.Column(db.UnicodeText)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    # 在服务器端将post.body中的markdown文本转换成html格式
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        # 设置bleach.clean 允许的标签
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em',
+                        'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p', 'img']
+        # 设置bleach.clean 允许的属性
+        allowed_attr = {
+            'a': ['href', 'title'],
+            'abbr': ['title'],
+            'acronym': ['title'],
+            'img': ['src', 'alt', 'title', 'width', 'height']
+            }
+        target.body_html = bleach.linkify(bleach.clean(
+            markdown(value, output_format='html'),
+            tags=allowed_tags, attributes=allowed_attr, strip=True))
+
+
     def __repr__(self):
         return f'<文章：{self.title}>'
 
+
+# SQLAlchemy ‘set’事件监听程序，当body字段设了新值，函数就会自动被调用。
+db.event.listen(Post.body, 'set', Post.on_changed_body)

@@ -1,0 +1,26 @@
+<div class="">
+    <ul class="">
+        {% for post in posts %}
+        <li class="post">
+            <div class="">
+                <a href="{{ url_for('blog.post', id=post.id) }}" class="text-decoration-none">
+                    <h3 class="text-dark g-color-primary--hover">{{ post.title }}</h3>
+                </a>
+            </div>
+            <div><p>{{ post.summary }}</p></div>
+            <div><p>{{ post.author.username }}</p></div>
+            {% if current_user == post.author %}
+                <a class="btn u-btn-deeporange" href="{{ url_for('blog.edit', id=post.id) }}"></a>
+            {% endif %}
+            <div>
+                {% if post.body_html %}
+                    {{ post.body_html | safe }}
+                {% else %}
+                    {{ post.body }}
+                {% endif %}
+            </div>
+            <div><p>{{ moment(post.timestamp).fromNow() }}</p></div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
