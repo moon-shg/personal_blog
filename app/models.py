@@ -245,7 +245,7 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), unique=True)
     default = db.Column(db.Boolean, default=False)
-    posts = db.relation('posts', backref='category', lazy='dynamic')
+    posts = db.relation('Post', backref='category', lazy='dynamic')
 
     # 添加文章分类
     @staticmethod

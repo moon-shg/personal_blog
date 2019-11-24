@@ -11,25 +11,24 @@
         <form method="post">
             {{ form.hidden_tag() }}
             <div class="form-row mb-2">
-                <div class="col-md-4 mb-2">
+                <div class="col-md-8 mb-2">
                     {{ form.title.label(class="g-font-size-16 g-font-weight-600 ") }}
                     {{ form.title(class="form-control", placeholder="标题") }}
                 </div>
-                <div class="col-md-8 mb-2">
-                    {{ form.summary.label(class="g-font-size-16 g-font-weight-600") }}
-                    {{ form.summary(class="form-control", placeholder="文章概述") }}
+                <div class="col-md-4 mb-2">
+                    {{ form.category.label(class="g-font-size-16 g-font-weight-600") }}
+                    {{ form.category(class="form-control", placeholder="文章分类") }}
+                </div>
+            </div>
+            <div class="form-row mb-2">
+                <div class="col-12 mb-2">
+                    {{ form.summary.label(class="g-font-size-16 g-font-weight-600 ") }}
+                    {{ form.summary(class="form-control", placeholder="概述") }}
                 </div>
             </div>
             <div class="mb-4">{{ form.body }}</div>
             <div class="text-center" >{{ form.submit(class="btn btn-lg u-btn-primary") }}</div>
         </form>
-    {% else %}
-{#TODO: move editor button to article page #}
-        <div class="d-flex justify-content-between mt-4 mb-5 ">
-            <a href="{{ url_for('auth.login') }}" class="btn btn-lg g-color-indigo g-font-size-15 g-color-white--hover u-btn-outline-indigo u-btn-hover-v1-4 g-rounded-50" role="button">
-                <span> &nbsp;编辑框登录后可见 <i class="fa fa-edit g-font-size-18 float-left g-mt-3"></i></span>
-            </a>
-        </div>
     {% endif %}
 </div>
 {% endblock articles %}

@@ -7,7 +7,7 @@ from ..models import Category
 class PostEditForm(RenderForm):
     title = StringField(label='标题', validators=[DataRequired(), Length(1, 255)])
     summary = StringField(label='概述')
-    category = SelectField(label="文章分类")
+    category = SelectField(label="文章分类", coerce=int)
     body = TextAreaField(label="正文", validators=[DataRequired()],
                          render_kw={'data-provide': "markdown", 'rows': '10',
                                     "placeholder": "文章正文(支持MarkDown)",
@@ -17,4 +17,4 @@ class PostEditForm(RenderForm):
     # 添加 分类选择表单category 的值
     def __init__(self, *args, **kwargs):
         super(PostEditForm, self).__init__(*args, **kwargs)
-        self.category.choices = [(category.id, category.name) for category in Category.query.order_by(Category.name).all()]
+        self.category.choices = [(category.id, category.name) for category in Category.query.order_by(Category.default.desc()).all()]

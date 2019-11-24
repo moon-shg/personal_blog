@@ -1,6 +1,6 @@
 from . import blog
 from app import db
-from ..models import Post, Permission
+from ..models import Post, Permission, Category
 from flask import render_template, abort, flash, redirect, url_for
 from flask_login import current_user, login_required
 from .forms import PostEditForm
@@ -21,6 +21,7 @@ def edit(id):
     form = PostEditForm()
     if form.validate_on_submit():
         post.title = form.title.data
+        post.category = Category.query.get(form.category.data)
         post.summary = form.summary.data
         post.body = form.body.data
         db.session.add(post)
@@ -28,6 +29,7 @@ def edit(id):
         flash('博客已修改成功')
         return redirect(url_for('.post', id=post.id))
     form.title.data = post.title
+    form.category.data = post.category_id
     form.summary.data = post.summary
     form.body.data = post.body
     return render_template("blog/edit_post.html", form=form, post=post)

@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap-markdown/css/bootstrap-markdown.min.css') }}">
     {# font-awesome icons #}
     <link rel="stylesheet" href="{{ url_for('static', filename='plugins/font-awesome-4.7.0/css/font-awesome.css') }}">
+    {# social-share.css #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/social-share/css/share.min.css') }}">
 
 
     {% endblock %}
@@ -43,10 +45,15 @@
 
     <!-- Optional JavaScript -->
     {{ bootstrap.load_js() }}
+    {# moment.js #}
+    {{ moment.include_moment() }}
+    {{ moment.locale('zh-cn') }}
     {# bootstrap-markdown.js #}
     <script src="{{ url_for('static', filename='plugins/bootstrap-markdown/js/bootstrap-markdown.js') }}"></script>
     <script src="{{ url_for('static', filename='plugins/bootstrap-markdown/js/bootstrap-markdown.zh.js') }}"></script>
     <script src="{{ url_for('static', filename='plugins/bootstrap-markdown/js/marked.js') }}"></script>
+    {# social-share.js   #}
+    <script src="{{ url_for('static', filename='plugins/social-share/js/social-share.min.js') }}"></script>
     {#script#}
     {% block scripts %}
      <script>
