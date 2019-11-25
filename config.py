@@ -14,6 +14,7 @@ class Config:
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_SENDER = os.environ.get('MAIL_SENDER', 'ST<393773661@QQ.COM>')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    POSTS_PER_PAGE = int(os.environ.get('POSTS_PER_PAGE', '10'))
 
     @staticmethod
     def init_app(app):

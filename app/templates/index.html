@@ -1,10 +1,15 @@
 {% extends "base.html" %}
+{% import "_macros.html" as macros %}
 
 {% block title %}Potato Cookbook - 主页{% endblock %}
 
 {% block articles %}
 {# posts list #}
 {% include "_post.html" %}
+{# posts pagination #}
+<div class="mb-5">
+    {{ macros.pagination_widget(pagination, 'main.index') }}
+</div>
 {# post editor #}
 <div class="u-heading-v3-1 g-mb-30">
 <h4 class="u-heading-v3__title g-color-primary g-brd-primary">发表文章</h4>

@@ -1,0 +1,35 @@
+{# 分页栏的宏，接收2个参数：paginate()方法生成的Pagination类，端点 #}
+{% macro pagination_widget(pagination, endpoint) %}
+<ul class="list-inline text-center">
+{# 上一页 #}
+    <li class="list-inline-item float-left g-hidden-sm-down "
+            {% if not pagination.has_prev %} style="pointer-events: none; opacity: .5;" {% endif %}>
+        <a class="u-pagination-v1__item u-pagination-v1-4 g-brd-gray-light-v3 g-brd-primary--hover g-rounded-50 g-pa-7-16"
+           href="{% if pagination.has_prev %}{{ url_for(endpoint,
+        page=pagination.page - 1, **kwargs) }}{% else %}{% endif %}">上一页</a>
+    </li>
+{# 分页导航列表 #}
+    {% for p in pagination.iter_pages() %}
+        {% if p %}
+            <li class="list-inline-item ">
+                {% if p == pagination.page %}
+                    <a class="u-pagination-v1__item u-pagination-v1-4 g-brd-primary--hover g-rounded-50 g-pa-7-14 u-pagination-v1-4--active"
+                       href="{{ url_for(endpoint, page=p, **kwargs) }}">{{ p }}</a>
+                {% else %}
+                    <a class="u-pagination-v1__item u-pagination-v1-4 g-brd-primary--hover g-rounded-50 g-pa-7-14"
+                       href="{{ url_for(endpoint, page=p, **kwargs) }}">{{ p }}</a>
+                {% endif %}
+            </li>
+        {% else %}
+            <li>&hellip;</li>
+        {% endif %}
+    {% endfor %}
+{# 下一页 #}
+    <li  class="list-inline-item float-right g-hidden-sm-down "
+            {% if not pagination.has_next %} style="pointer-events: none; opacity: .5;"  {% endif %}>
+        <a class="u-pagination-v1__item u-pagination-v1-4 g-brd-gray-light-v3 g-brd-primary--hover g-rounded-50 g-pa-7-16"
+            href="{% if pagination.has_next %}{{ url_for(endpoint,
+        page=pagination.page + 1, **kwargs) }}{% else %}{% endif %}">下一页</a>
+    </li>
+</ul>
+{% endmacro %}
