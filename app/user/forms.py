@@ -1,5 +1,5 @@
 from ..auth.forms import RenderForm
-from wtforms import StringField, BooleanField, TextAreaField, SubmitField, SelectField, RadioField, ValidationError
+from wtforms import StringField, BooleanField, TextAreaField, SubmitField, SelectField, FileField, ValidationError
 from wtforms.validators import Length, DataRequired, Email, Regexp
 from ..models import Role, User
 

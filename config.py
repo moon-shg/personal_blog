@@ -1,7 +1,8 @@
 import os
+from flask_uploads import IMAGES
 import mysql.connector
 
-dasedir = os.path.abspath(os.path.dirname(__file__))
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
@@ -14,7 +15,12 @@ class Config:
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_SENDER = os.environ.get('MAIL_SENDER', 'ST<393773661@QQ.COM>')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # 设置分页
     POSTS_PER_PAGE = int(os.environ.get('POSTS_PER_PAGE', '10'))
+    # flask-uploads 配置
+    UPLOADED_AVATAR_DEST = os.path.join(basedir, 'app/static/img/upload')
+    UPLOADED_AVATAR_ALLOW = IMAGES
+
 
     @staticmethod
     def init_app(app):

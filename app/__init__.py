@@ -5,6 +5,7 @@ from config import config
 from flask_mail import Mail
 from flask_login import LoginManager
 from flask_moment import Moment
+from flask_uploads import UploadSet, configure_uploads, patch_request_class
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
@@ -12,6 +13,7 @@ mail = Mail()
 moment = Moment()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'  # 设置登录页面的 endpiont
+avatars = UploadSet('AVATAR')
 
 
 def create_app(config_name):
@@ -25,6 +27,10 @@ def create_app(config_name):
     mail.init_app(app)
     login_manager.init_app(app)
     moment.init_app(app)
+    # 配置flask-uploads
+    configure_uploads(app, avatars)
+    patch_request_class(app, 2*1024*1024)  # 设置上传文件最大为2mb
+
 
     # 注册蓝本
     from .main import main as main_blueprint

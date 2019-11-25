@@ -1,9 +1,11 @@
 from . import user_page
-from flask import render_template, redirect, url_for, flash
+import os
+from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
+from flask_uploads import UploadNotAllowed
 from ..models import User, Permission, Role
 from .forms import EditProfileForm, EditProfileAdminForm
-from app import db
+from app import db, avatars
 from ..decorators import admin_required
 
 
@@ -67,3 +69,22 @@ def edit_profile_admin(id):
     form.location.data = user.location
     form.about_me.data = user.about_me
     return render_template('user/edit_profile.html', form=form, user=user)
+
+
+# 上传头像页面
+@user_page.route('/upload-avatar', methods=['GET', 'POST'])
+@login_required
+def upload_avatar():
+    user = current_user._get_current_object()
+    if request.method == 'POST' and 'avatar' in request.files:
+        try:
+            filename = avatars.save(request.files['avatar'])
+        except UploadNotAllowed:
+            flash('请选择要上传的文件！')
+        else:
+            user.avatar = url_for('static', filename='img/upload/'+filename)
+            db.session.add(user)
+            db.session.commit()
+            flash('头像已更新')
+            return redirect(url_for('user_page.user', username=user.username))
+    return render_template('user/upload_avatar.html', user=user)

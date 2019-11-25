@@ -5,7 +5,7 @@
         <img src="#" class="card-img-top" alt="">
 {#    author avatar #}
         <div class="media g-pl-12">
-            <img class="img-fluid g-width-45 g-height-45 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="{{ url_for('static', filename="img/avatar/akkarin.jpg")}}" alt="">
+            <img class="img-fluid g-width-45 g-height-45 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="{{ post.author.avatar }}" alt="">
             <div class="media-body ml-2 g-mt-2 g-font-size-12">
                 <p class="mb-0 g-font-weight-600 g-font-size-default">{{ post.author.username }}</p>
                 {{ moment(post.timestamp).fromNow(refresh=True) }}

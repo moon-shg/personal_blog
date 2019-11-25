@@ -25,7 +25,7 @@
             {% if current_user.is_authenticated %}
                 <div class="dropdown">
                     <a class="d-flex text-decoration-none dropdown-toggle g-pl-25 g-pl-0--sm" href="#" data-toggle="dropdown">
-                        <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="{{ url_for('static', filename="img/avatar/akkarin.jpg")}}" alt="">
+                        <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="{{ current_user.avatar }}" alt="">
                         <span class="align-self-center pl-2 g-hidden-sm-down">{{ current_user.username }}</span>
                     </a>
                     <div class="dropdown-menu text-center g-min-width-100x animated fadeIn">

@@ -1,5 +1,5 @@
 from . import db, login_manager
-from flask import current_app
+from flask import current_app, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -97,6 +97,9 @@ class User(db.Model, UserMixin):
     about_me = db.Column(db.UnicodeText())
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+    # 头像
+    avatar = db.Column(db.String(128), default='/static/img/avatar/akkarin.jpg')
+
     # 博客
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 

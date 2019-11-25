@@ -12,9 +12,15 @@
                 <aside class="g-py-30 g-px-10 g-bg-white border g-brd-gray-light-v4 rounded">
                     {# profile image #}
                     <div>
-                        <div class="text-center mb-4">
-                            <img class="img-fluid g-width-120 rounded-circle border g-pa-3 g-mb-10" src="{{ url_for('static' ,filename="img/avatar/akkarin.jpg") }}" alt="">
+                        <div class="text-center mb-4 g-pos-rel">
+                            <img class="img-fluid g-height-120 g-width-120 rounded-circle border g-pa-3 g-mb-10" src="{{ user.avatar }}" alt="">
                             <span class="d-block g-font-size-16 g-font-weight-600">{{ user.username }}</span>
+                            {% if current_user == user %}
+                            <a href="{{ url_for('user_page.upload_avatar') }}">
+                                <span class="u-icon-v3 u-icon-size--xs g-color-white--hover g-bg-primary--hover rounded-circle g-pos-abs g-top-0 g-right-15 g-cursor-pointer" data-toggle="tooltip"
+                                data-placement="top" title="修改头像"><i class="fa fa-pencil mt-2"></i></span>
+                            </a>
+                            {% endif %}
                             <hr>
                         </div>
                     </div>

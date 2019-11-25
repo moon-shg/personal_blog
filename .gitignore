@@ -45,3 +45,6 @@ tmp
 
 # Virtual environment
 venv
+
+# upload files
+app/static/img/upload
