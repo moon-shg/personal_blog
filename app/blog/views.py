@@ -9,7 +9,7 @@ from .forms import PostEditForm
 @blog.route('/post/<int:id>')
 def post(id):
     post = Post.query.get_or_404(id)
-    return render_template('blog/post.html', posts=[post])
+    return render_template('blog/post.html', post=post)
 
 # 编辑博客
 @blog.route('/edit/<int:id>', methods=['GET', 'POST'])

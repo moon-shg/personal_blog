@@ -1,7 +1,73 @@
 {% extends "base.html" %}
 
-{% block title %}Potato Cookbook - {{ posts[0].title }} {% endblock %}
+{% block title %}Potato Cookbook - {{ post.title }} {% endblock %}
 
 {% block articles %}
-    {% include "_post.html" %}
+<div class="mb-5">
+{# header #}
+    <div class="card-body g-pt-10 px-0">
+        {# edit button #}
+        {% if current_user == post.author or current_user.can(Permission.ADMIN) %}
+            <a class="btn btn-xs u-btn-deeporange float-right px-3 " href="{{ url_for('blog.edit', id=post.id) }}">编辑文章</a>
+        {% endif %}
+        {# title #}
+        <h1 class="text-dark g-font-weight-600 g-color-primary">{{ post.title }}</h1>
+        {# post info #}
+        <ul class="list-inline d-sm-flex g-color-gray-dark-v4 mb-0">
+            <li class="list-inline-item">
+                <span class="btn btn-xs u-btn-outline-red g-mr-10">原创</span>
+            </li>
+            <li class="list-inline-item">
+                <a href="#" class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover">{{ post.author.username }}</a>
+            </li>
+            <li class="list-inline-item g-mx-10">/</li>
+            <li class="list-inline-item">
+                <i class="fa fa-clock-o"></i>
+                <span>{{ moment(post.timestamp).format('YYYY年MM月DD日 HH:mm') }}</span>
+            </li>
+            <li class="list-inline-item g-mx-10">/</li>
+            <li class="list-inline-item g-mx-10">
+                <i class="fa fa-comment-o"></i>
+                <span>评论数</span>
+            </li>
+            <li class="list-inline-item ml-auto">
+                <i class="fa fa-eye"></i>
+                <span>&nbsp;{{ post.views }}</span>
+            </li>
+        </ul>
+    </div>
+    <hr class="g-color-gray-dark-v4 mt-2">
+{# post body #}
+    <div>
+        {#    header-image  #}
+        {#    <img src="#" class="card-img-top" alt="">#}
+        {# post summary #}
+        <p class="card-text mb-0"><strong class="g-color-primary g-mr-5">概要：</strong>{{ post.summary }}</p>
+        <div class="u-divider u-divider-db-dashed u-divider-center g-brd-gray-light-v2 g-my-50">
+            <i class="fa fa-arrow-down u-divider__icon u-divider__icon--indented g-bg-gray-light-v4 g-color-gray-light-v1 rounded-circle"></i>
+        </div>
+        <div class="markdown-body">
+            {% if post.body_html %}
+                {{ post.body_html | safe }}
+            {% else %}
+                {{ post.body }}
+            {% endif %}
+        </div>
+    </div>
+{# footer #}
+    <div class="g-mt-15 g-mb-30">
+        <h6 class="g-color-gray-dark-v1 g-mb-15">
+            <strong class="g-color-primary g-mr-15">分类:</strong>
+            <a class="btn btn-sm btn-outline-primary" href="#">{{ post.category.name }}</a>
+        </h6>
+
+    </div>
+{#    social-share #}
+    <div class="u-heading-v1-5 g-brd-gray-light-v2 text-center">
+        <h2 class="u-heading-v1__title g-bg-white pl-15">
+            <div class="social-share"  data-disabled="google,facebook,qzone,linkedin,diandian,tencent"></div>
+        </h2>
+    </div>
+</div>
+
 {% endblock articles %}
