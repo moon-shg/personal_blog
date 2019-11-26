@@ -1,0 +1,25 @@
+<div class="">
+    {% for comment in comments %}
+        <div class="social-feed-box">
+            <div class="social-avatar">
+                <a href="" class="float-left">
+                    <img alt="image" src="{{ comment.author.avatar }}">
+                </a>
+                <div class="media-body">
+                    <a href="#">
+                        {{ comment.author.username }}
+                    </a>
+                    <small class="text-muted">{{ moment(comment.timestamp).format("YYYY年MM月DD日 HH:MM") }}</small>
+                </div>
+            </div>
+            <div class="social-body">
+                {% if comment.body_html %}
+                    {{ comment.body_html | safe }}
+                {% else %}
+                    {{ comment.body }}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+

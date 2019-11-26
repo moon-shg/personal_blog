@@ -18,3 +18,11 @@ class PostEditForm(RenderForm):
     def __init__(self, *args, **kwargs):
         super(PostEditForm, self).__init__(*args, **kwargs)
         self.category.choices = [(category.id, category.name) for category in Category.query.order_by(Category.default.desc()).all()]
+
+
+class CommentForm(RenderForm):
+    body = TextAreaField(label="正文", validators=[DataRequired()],
+                         render_kw={'data-provide': "markdown", 'rows': '10',
+                                    "placeholder": "文章正文(支持MarkDown)",
+                                    'class': "form-control form-control-md g-color-black g-bg-white--focus g-brd-gray-light-v4 g-brd-primary--focus g-resize-none rounded-3 g-pa-15"})
+    submit = SubmitField(label='提交')

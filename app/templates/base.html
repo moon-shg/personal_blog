@@ -39,7 +39,7 @@
 
             {% else %}
                 <a class="d-flex text-decoration-none" href="{{ url_for('auth.login') }}">
-                    <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="../static/img/avatar/akkarin.jpg" alt="">
+                    <img class="img-fluid g-width-35 g-height-35 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="{{ url_for('static', filename="img/avatar/akkarin.jpg") }}" alt="">
                     <span class="align-self-center pl-2 g-hidden-sm-down">登录</span>
                 </a>
             {% endif %}
