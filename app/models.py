@@ -253,6 +253,9 @@ class Category(db.Model):
     name = db.Column(db.String(128), unique=True)
     default = db.Column(db.Boolean, default=False)
     posts = db.relationship('Post', backref='category', lazy='dynamic')
+    # 二级分类
+    parent_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    sub_categories = db.relationship('Category', backref=db.backref('sub_category', remote_side=[id]), lazy='dynamic')
 
     # 添加文章分类
     @staticmethod
@@ -279,7 +282,7 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     # 评论回复 (一对多的自引用，也是树状结构)
     parent_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
-    replies = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]), lazy='dynamic')  # 这里使用 remote_side 表示多对一的关系
+    replies = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]), lazy='dynamic')   # 这里使用 remote_side 表示多对一的关系
 
     # 在服务器端将comment.body中的markdown文本转换成html格式
     @staticmethod

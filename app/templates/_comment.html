@@ -9,7 +9,7 @@
                     <img alt="image" src="{{ comment.author.avatar }}">
                 </a>
                 <div class="media-body">
-                    <a class="g-color-black g-font-weight-600" href="#">
+                    <a class="g-color-black g-font-weight-600 text-decoration-none" href="#">
                         {{ comment.author.username }}
                         {% if comment.parent != None %}
                             <span>&nbsp;<i class="fa fa-share g-color-primary"></i>&nbsp;{{ comment.parent.author.username }}</span>
@@ -37,7 +37,7 @@
                 {% endif %}
             </div>
 {#        reply #}
-            {% if current_user.can(Permission.COMMENT) %}
+            {% if not moderate and current_user.can(Permission.COMMENT) %}
             <div>
                 <ul class="list-inline d-sm-flex my-0">
                     <li class="list-inline-item ml-auto">
@@ -47,9 +47,26 @@
                     </li>
                 </ul>
             </div>
+            {% elif moderate and current_user.can(Permission.MODERATE) %}
+            <div>
+                <ul class="list-inline d-sm-flex my-0">
+                    <li class="list-inline-item ml-auto">
+                        {% if comment.disable %}
+{#                            TODO: 修改按钮样式#}
+                        <a href="{{ url_for('blog.moderate_enable', id=comment.id, page=page) }}" class="btn btn-success btn-sm" role="button">
+                            <i class="fa fa-reply g-pos-rel g-mx-10">&nbsp;解除</i>
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('blog.moderate_disable', id=comment.id, page=page) }}" class="btn btn-danger btn-sm" role="button">
+                            <i class="fa fa-reply g-pos-rel g-mx-10">&nbsp;屏蔽</i>
+                        </a>
+                        {% endif %}
+                </ul>
+            </div>
             {% endif %}
         </div>
 {#       reply editor #}
+        {% if not moderate %}
         <div class="modal fade" id="comment{{ comment.id | string }}" tabindex="-1" data-backdrop="static" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -74,6 +91,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     {% endfor %}
 </div>
 

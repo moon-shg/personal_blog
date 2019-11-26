@@ -4,6 +4,7 @@ from ..models import Post, Permission, Category, Comment
 from flask import render_template, abort, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 from .forms import PostEditForm, CommentForm
+from app.decorators import permission_require
 
 
 # 博客地址
@@ -49,3 +50,38 @@ def edit(id):
     form.summary.data = post.summary
     form.body.data = post.body
     return render_template("blog/edit_post.html", form=form, post=post)
+
+# 管理评论
+@blog.route('/moderate/<int:id>')
+@login_required
+@permission_require(Permission.MODERATE)
+def moderate(id):
+    page = request.args.get('page', 1, type=int)
+    post = Post.query.get_or_404(id)
+    pagination = Comment.query.filter_by(post_id=id).order_by(Comment.timestamp.desc()).paginate(
+        page, per_page=10, error_out=False)
+    comments = pagination.items
+    return render_template('blog/comment_moderate.html', post=post, comments=comments, pagination=pagination, page=page)
+
+# 解除屏蔽
+@blog.route('/moderate/enable/<int:id>')
+@login_required
+@permission_require(Permission.MODERATE)
+def moderate_enable(id):
+    comment = Comment.query.get_or_404(id)
+    comment.disable = False
+    db.session.add(comment)
+    db.session.commit()
+    return redirect(url_for('blog.moderate', id=comment.post_id, page=request.args.get('page', 1, type=int)))
+
+
+# 屏蔽评论
+@blog.route('/moderate/disable/<int:id>')
+@login_required
+@permission_require(Permission.MODERATE)
+def moderate_disable(id):
+    comment = Comment.query.get_or_404(id)
+    comment.disable = True
+    db.session.add(comment)
+    db.session.commit()
+    return redirect(url_for('blog.moderate', id=comment.post_id, page=request.args.get('page', 1, type=int)))

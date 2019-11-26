@@ -72,6 +72,10 @@
 {# comment #}
 <div class="u-heading-v3-1 g-mb-30">
 <h4 class="u-heading-v3__title g-color-primary g-brd-primary">文章评论</h4>
+{# comment moderation #}
+{% if current_user.can(Permission.MODERATE) %}
+    <a href="{{ url_for('blog.moderate', id=post.id) }}" class="btn btn-sm btn-outline-danger pull-right">管理评论</a>
+{% endif %}
 </div>
 {% include "_comment.html" %}
 {# comment editor #}
