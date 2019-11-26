@@ -8,7 +8,7 @@
     <div class="card-body g-pt-10 px-0">
         {# edit button #}
         {% if current_user == post.author or current_user.can(Permission.ADMIN) %}
-            <a class="btn btn-xs u-btn-deeporange float-right px-3 " href="{{ url_for('blog.edit', id=post.id) }}">编辑文章</a>
+            <a class="d-block btn btn-xs u-btn-deeporange float-right px-3 g-mt-25" href="{{ url_for('blog.edit', id=post.id) }}">编辑文章</a>
         {% endif %}
         {# title #}
         <h1 class="text-dark g-font-weight-600 g-color-primary">{{ post.title }}</h1>
@@ -28,7 +28,7 @@
             <li class="list-inline-item g-mx-10">/</li>
             <li class="list-inline-item g-mx-10">
                 <i class="fa fa-comment-o"></i>
-                <span>评论数</span>
+                <span>{{ post.comments.count() }}</span>
             </li>
             <li class="list-inline-item ml-auto">
                 <i class="fa fa-eye"></i>

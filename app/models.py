@@ -277,6 +277,9 @@ class Comment(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    # 评论回复 (一对多的自引用，也是树状结构)
+    parent_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
+    replies = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]), lazy='dynamic')  # 这里使用 remote_side 表示多对一的关系
 
     # 在服务器端将comment.body中的markdown文本转换成html格式
     @staticmethod
@@ -297,3 +300,4 @@ class Comment(db.Model):
 
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
+

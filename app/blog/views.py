@@ -1,7 +1,7 @@
 from . import blog
 from app import db
 from ..models import Post, Permission, Category, Comment
-from flask import render_template, abort, flash, redirect, url_for
+from flask import render_template, abort, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 from .forms import PostEditForm, CommentForm
 
@@ -12,17 +12,19 @@ def post(id):
     form = CommentForm()
     type_flag = 'CommentForm'
     post = Post.query.get_or_404(id)
+    comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.timestamp).all()
+    # 文章评论
     if form.validate_on_submit():
         comment = Comment(
             body=form.body.data,
             post=post,
-            author=current_user._get_current_object()
+            author=current_user._get_current_object(),
+            parent=Comment.query.get(form.parent.data)
         )
         db.session.add(comment)
         db.session.commit()
         flash("您的评论已发布！")
         return redirect(url_for('blog.post', id=post.id))
-    comments = Comment.query.order_by(Comment.timestamp).all()
     return render_template('blog/post.html', post=post, comments=comments, form=form, type_flag=type_flag)
 
 # 编辑博客

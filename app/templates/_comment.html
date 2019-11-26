@@ -1,23 +1,77 @@
+{% from "_macros.html" import comment_reply_widget %}
 <div class="">
     {% for comment in comments %}
-        <div class="social-feed-box">
+{#       comments #}
+        <div class="social-feed-box g-pa-10">
+{#        avatar #}
             <div class="social-avatar">
                 <a href="" class="float-left">
                     <img alt="image" src="{{ comment.author.avatar }}">
                 </a>
                 <div class="media-body">
-                    <a href="#">
+                    <a class="g-color-black g-font-weight-600" href="#">
                         {{ comment.author.username }}
+                        {% if comment.parent != None %}
+                            <span>&nbsp;<i class="fa fa-share g-color-primary"></i>&nbsp;{{ comment.parent.author.username }}</span>
+                        {% endif %}
                     </a>
                     <small class="text-muted">{{ moment(comment.timestamp).format("YYYY年MM月DD日 HH:MM") }}</small>
                 </div>
             </div>
-            <div class="social-body">
+{#        comment.body #}
+            <div class="social-body g-pb-0">
+                {% if comment.parent != None %}
+                    <div class="social-body g-py-0 g-px-0 g-bg-gray-light-v4 mb-2">
+                        <i class="fa fa-quote-left pull-left fa-border"></i>
+                        {% if comment.parent.body_html %}
+                            {{ comment.parent.body_html | safe }}
+                        {% else %}
+                            {{ comment.parent.body }}
+                        {% endif %}
+                    </div>
+                {% endif %}
                 {% if comment.body_html %}
                     {{ comment.body_html | safe }}
                 {% else %}
                     {{ comment.body }}
                 {% endif %}
+            </div>
+{#        reply #}
+            {% if current_user.can(Permission.COMMENT) %}
+            <div>
+                <ul class="list-inline d-sm-flex my-0">
+                    <li class="list-inline-item ml-auto">
+                        <a href="#comment{{ comment.id | string }}" data-toggle="modal" class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" role="button">
+                            <i class="fa fa-reply g-pos-rel g-mx-10">&nbsp;回复</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+{#       reply editor #}
+        <div class="modal fade" id="comment{{ comment.id | string }}" tabindex="-1" data-backdrop="static" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel">回复评论</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                    <div class="modal-body">
+                        <div class="social-body g-pt-10 g-px-0 g-bg-gray-light-v4 mb-2">
+                            <i class="fa fa-quote-left fa-2x pull-left fa-border"></i>
+                            {% if comment.body_html %}
+                                {{ comment.body_html | safe }}
+                            {% else %}
+                                {{ comment.body }}
+                            {% endif %}
+                            <p class="d-flex justify-content-end mb-0 mr-4">--{{ comment.author.username }}</p>
+                        </div>
+                        {{ comment_reply_widget(comment, form) }}
+                    </div>
+                </div>
             </div>
         </div>
     {% endfor %}
