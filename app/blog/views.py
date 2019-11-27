@@ -3,7 +3,7 @@ from app import db
 from ..models import Post, Permission, Category, Comment
 from flask import render_template, abort, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_required
-from .forms import PostEditForm, CommentForm, CommentEditForm
+from .forms import PostEditForm, CommentForm, CommentEditForm, LikePostForm
 from app.decorators import permission_require
 
 
@@ -12,6 +12,7 @@ from app.decorators import permission_require
 def post(id):
     form = CommentForm()  # 用于发表评论的表单
     form2 = CommentEditForm()  # 用于修改评论的表单
+    form3 = LikePostForm()  # 用于收藏文章
     type_flag = 'CommentForm'
     post = Post.query.get_or_404(id)
     comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.timestamp).all()
@@ -35,8 +36,15 @@ def post(id):
         db.session.commit()
         flash('已修改评论！')
         return redirect(url_for('blog.post', id=post.id))
+    # 收藏文章
+    if form3.validate_on_submit() and form3.submit_like_post.data:
+        user = current_user._get_current_object()
+        user.like(post)
+        db.session.commit()
+        flash('已收藏文章！')
+        return redirect(url_for('blog.post', id=post.id))
     return render_template('blog/post.html', post=post, comments=comments, form=form,
-                           form2=form2, type_flag=type_flag)
+                           form2=form2, form3=form3, type_flag=type_flag)
 
 # 编辑博客
 @blog.route('/edit/<int:id>', methods=['GET', 'POST'])

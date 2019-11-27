@@ -103,6 +103,8 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     # 评论
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
+    # 收藏文章
+    likes = db.relationship('Like', backref='user', lazy='dynamic', cascade='all, delete-orphan')
 
     # 创建用户时，设置默认用户组
     def __init__(self, **kwargs):
@@ -179,6 +181,24 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f'<用户名：{self.username}>'
 
+    # 收藏文章
+    def like(self, post):
+        if not self.liked(post):
+            l = Like(user=self, post=post)
+            db.session.add(l)
+
+    # 取消收藏
+    def dislike(self, post):
+        if self.liked(post):
+            l = self.likes.filter_by(post_id=post.id).first()
+            if l:
+                db.session.delete(l)
+
+    def liked(self, post):
+        if post.id is None:
+            return False
+        return self.likes.filter_by(post_id=post.id).first() is not None
+
 
 # 匿名用户
 class AnonymousUser(AnonymousUserMixin):
@@ -214,7 +234,8 @@ class Post(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     # 评论
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
-
+    # 被收藏
+    liked = db.relationship('Like', backref='post', lazy='dynamic', cascade='all, delete-orphan')
 
     # 创建博客时，设置默认分类
     def __int__(self, **kwargs):
@@ -238,6 +259,12 @@ class Post(db.Model):
         target.body_html = bleach.linkify(bleach.clean(
             markdown(value, output_format='html'),
             tags=allowed_tags, attributes=allowed_attr, strip=True))
+
+    # 被收藏
+    def is_liked_by(self, user):
+        if user.id is None:
+            return False
+        return self.liked.filter_by(user_id=user.id).first() is not None
 
     def __repr__(self):
         return f'<文章：{self.title}>'
@@ -284,7 +311,8 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     # 评论回复 (一对多的自引用，也是树状结构)
     parent_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
-    replies = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]), lazy='dynamic')   # 这里使用 remote_side 表示多对一的关系
+    replies = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]),
+                              lazy='dynamic')  # 这里使用 remote_side 表示多对一的关系
 
     # 在服务器端将comment.body中的markdown文本转换成html格式
     @staticmethod
@@ -306,3 +334,10 @@ class Comment(db.Model):
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
 
+
+# 收藏文章
+class Like(db.Model):
+    __tablename__ = 'likes'
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)

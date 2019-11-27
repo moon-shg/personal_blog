@@ -55,12 +55,20 @@
         </div>
     </div>
 {# footer #}
-    <div class="g-mt-15 g-mb-30">
+    <div class="g-mt-15 g-mb-30 d-flex justify-content-between">
         <h6 class="g-color-gray-dark-v1 g-mb-15">
             <strong class="g-color-primary g-mr-15">分类:</strong>
             <a class="btn btn-sm btn-outline-primary" href="#">{{ post.category.name }}</a>
         </h6>
-
+        {% if current_user.is_authenticated %}
+            {% if not current_user.liked(post) %}
+                <form method="post" action="{{ url_for('blog.post', id=post.id) }}">
+                    {{ form3.hidden_tag() }}
+                    {{ form3.submit_like_post(class="btn btn-danger btn-circle btn-outline") }}
+                </form>
+            {% endif %}
+{#            TODO:add dislike#}
+        {% endif %}
     </div>
 {#    social-share #}
     <div class="u-heading-v1-5 g-brd-gray-light-v2 text-center">

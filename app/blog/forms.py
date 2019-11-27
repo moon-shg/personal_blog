@@ -48,3 +48,8 @@ class CommentEditForm(RenderForm):
     id = StringField(label="自己的id",
                      render_kw={'readonly': '', 'class': 'g-pos-abs g-top-0 invisible'})
     submit_edit_comment = SubmitField(label='提交')
+
+
+# 收藏文章
+class LikePostForm(RenderForm):
+    submit_like_post = SubmitField()
