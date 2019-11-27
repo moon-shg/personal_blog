@@ -3,19 +3,20 @@ from app import db
 from ..models import Post, Permission, Category, Comment
 from flask import render_template, abort, flash, redirect, url_for, request
 from flask_login import current_user, login_required
-from .forms import PostEditForm, CommentForm
+from .forms import PostEditForm, CommentForm, CommentEditForm
 from app.decorators import permission_require
 
 
 # 博客地址
 @blog.route('/post/<int:id>', methods=['GET', 'POST'])
 def post(id):
-    form = CommentForm()
+    form = CommentForm()  # 用于发表评论的表单
+    form2 = CommentEditForm()  # 用于修改评论的表单
     type_flag = 'CommentForm'
     post = Post.query.get_or_404(id)
     comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.timestamp).all()
     # 文章评论
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.submit_comment.data:
         comment = Comment(
             body=form.body.data,
             post=post,
@@ -26,7 +27,16 @@ def post(id):
         db.session.commit()
         flash("您的评论已发布！")
         return redirect(url_for('blog.post', id=post.id))
-    return render_template('blog/post.html', post=post, comments=comments, form=form, type_flag=type_flag)
+    # 修改评论
+    if form2.validate_on_submit() and form2.submit_edit_comment.data:
+        comment = Comment.query.get_or_404(form2.id.data)
+        comment.body = form2.body.data
+        db.session.add(comment)
+        db.session.commit()
+        flash('已修改评论！')
+        return redirect(url_for('blog.post', id=post.id))
+    return render_template('blog/post.html', post=post, comments=comments, form=form,
+                           form2=form2, type_flag=type_flag)
 
 # 编辑博客
 @blog.route('/edit/<int:id>', methods=['GET', 'POST'])

@@ -5,7 +5,7 @@
 {#            用 type_flag 参数来指定渲染表单的种类#}
             {% if type_flag == 'CommentForm' %}
                 <div class="mb-4">{{ form.body(rows="10") }}</div>
-                <div class="text-center" >{{ form.submit(class="btn btn-lg u-btn-primary") }}</div>
+                <div class="text-center" >{{ form.submit_comment(class="btn btn-lg u-btn-primary") }}</div>
             {% else %}
                 <div class="form-row mb-2">
                     <div class="col-md-4">{{ form.title(class="form-control", placeholder="标题") }}</div>
