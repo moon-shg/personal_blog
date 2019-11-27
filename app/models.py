@@ -210,6 +210,7 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    # 分类
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     # 评论
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
@@ -255,7 +256,8 @@ class Category(db.Model):
     posts = db.relationship('Post', backref='category', lazy='dynamic')
     # 二级分类
     parent_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
-    sub_categories = db.relationship('Category', backref=db.backref('sub_category', remote_side=[id]), lazy='dynamic')
+    sub_categories = db.relationship('Category', backref=db.backref('parent', remote_side=[id]), lazy='dynamic')
+    posts_sub = db.relationship('Post', backref='sub_category', lazy='dynamic')
 
     # 添加文章分类
     @staticmethod

@@ -11,13 +11,17 @@
         <form method="post">
             {{ form.hidden_tag() }}
             <div class="form-row mb-2">
-                <div class="col-md-8 mb-2">
+                <div class="col-md-6 mb-2">
                     {{ form.title.label(class="g-font-size-16 g-font-weight-600 ") }}
                     {{ form.title(class="form-control", placeholder="标题") }}
                 </div>
-                <div class="col-md-4 mb-2">
+                <div class="col-md-3 mb-2">
                     {{ form.category.label(class="g-font-size-16 g-font-weight-600") }}
-                    {{ form.category(class="form-control", placeholder="文章分类") }}
+                    {{ form.category(class="form-control", placeholder="文章分类", onchange="Select('category', '#sub_category', category_url)") }}
+                </div>
+                <div class="col-md-3 mb-2">
+                    {{ form.sub_category.label(class="g-font-size-16 g-font-weight-600") }}
+                    {{ form.sub_category(class="form-control", placeholder="二级分类") }}
                 </div>
             </div>
             <div class="form-row mb-2">
@@ -32,3 +36,12 @@
     {% endif %}
 </div>
 {% endblock articles %}
+
+{% block scripts %}
+{{ super() }}
+    <script>
+        let category_url = "{{ url_for('blog.edit', id=post.id) }}";
+        {#let csrf = "{{ csrf_token() }}";#}
+    </script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}" charset="UTF-8"></script>
+{% endblock %}

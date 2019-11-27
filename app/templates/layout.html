@@ -61,12 +61,12 @@
     <script src="{{ url_for('static', filename='plugins/social-share/js/social-share.min.js') }}"></script>
     {#script#}
     {% block scripts %}
-     <script>
-        {#Bootstrap - toolstips#}
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-     </script>
-        {% endblock %}
+        <script>
+            {#Bootstrap - toolstips#}
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        </script>
+    {% endblock %}
   </body>
 </html>

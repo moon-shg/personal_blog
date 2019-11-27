@@ -1,7 +1,7 @@
 from . import blog
 from app import db
 from ..models import Post, Permission, Category, Comment
-from flask import render_template, abort, flash, redirect, url_for, request
+from flask import render_template, abort, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_required
 from .forms import PostEditForm, CommentForm, CommentEditForm
 from app.decorators import permission_require
@@ -46,9 +46,19 @@ def edit(id):
     if current_user != post.author and not current_user.can(Permission.ADMIN):
         abort(403)
     form = PostEditForm()
+    # 处理二级表单
+    if request.method == 'POST' and not form.submit.data:
+        data = request.get_json()
+        name = data['name']
+        category = Category.query.filter_by(name=name).first()
+        sub_categories = {category.id: category.name for category in Category.query.filter_by(parent_id=category.id).all()}
+        return jsonify(sub_categories)
     if form.validate_on_submit():
         post.title = form.title.data
-        post.category = Category.query.get(form.category.data)
+        if form.sub_category.data:
+            post.category = Category.query.get(form.sub_category.data)
+        else:
+            post.category = Category.query.get(form.category.data)
         post.summary = form.summary.data
         post.body = form.body.data
         db.session.add(post)
@@ -60,6 +70,9 @@ def edit(id):
     form.summary.data = post.summary
     form.body.data = post.body
     return render_template("blog/edit_post.html", form=form, post=post)
+
+
+
 
 # 管理评论
 @blog.route('/moderate/<int:id>')

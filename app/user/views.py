@@ -3,12 +3,12 @@ import os
 from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
 from flask_uploads import UploadNotAllowed
-from ..models import User, Permission, Role
+from ..models import User, Permission, Role, Comment
 from .forms import EditProfileForm, EditProfileAdminForm
 from app import db, avatars
 from ..decorators import admin_required
 
-
+# 个人主页
 @user_page.route('/<username>')
 @login_required
 def user(username):
@@ -19,7 +19,7 @@ def user(username):
         return redirect(url_for('main.index'))
     return render_template('user/user_page.html', user=user)
 
-
+# 编辑个人资料
 @user_page.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -40,7 +40,7 @@ def edit_profile():
     form.about_me.data = current_user.about_me if current_user.about_me is not None else ''
     return render_template('user/edit_profile.html', form=form, user=user)
 
-
+# 编辑个人资料（管理员）
 @user_page.route('/edit-profile/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -88,3 +88,14 @@ def upload_avatar():
             flash('头像已更新')
             return redirect(url_for('user_page.user', username=user.username))
     return render_template('user/upload_avatar.html', user=user)
+
+# 管理个人评论
+@user_page.route('/my-comments')
+@login_required
+def my_comments():
+    user = current_user._get_current_object()
+    page = request.args.get('page', 1, type=int)
+    pagination = user.comments.order_by(Comment.timestamp.desc()).paginate(
+        page, per_page=5, error_out=False)
+    comments = pagination.items
+    return render_template('user/my_comments.html', user=user, page=page, pagination=pagination, comments=comments)
