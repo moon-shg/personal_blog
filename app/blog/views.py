@@ -1,11 +1,13 @@
 from . import blog
 from app import db, post_img
 from ..models import Post, Permission, Category, Comment
-from flask import render_template, abort, flash, redirect, url_for, request, jsonify
+from flask import render_template, abort, flash, redirect, url_for, request, jsonify, send_from_directory
 from flask_login import current_user, login_required
 from .forms import PostEditForm, CommentForm, CommentEditForm, LikePostForm, DislikePostForm
 from app.decorators import permission_require
 from flask_uploads import UploadNotAllowed
+from flask_ckeditor import upload_success, upload_fail
+import os
 
 
 # 博客地址
@@ -130,3 +132,21 @@ def moderate_disable(id):
     db.session.add(comment)
     db.session.commit()
     return redirect(url_for('blog.moderate', id=comment.post_id, page=request.args.get('page', 1, type=int)))
+
+
+# 文章内图片
+@blog.route('/files/<path:filename>')
+def uploaded_files(filename):
+    path = '/static/img/upload/post_pic'
+    return send_from_directory(path, filename)
+
+@blog.route('/upload', methods=['POST'])
+def upload():
+    f = request.files.get('upload')  # 获取上传的文件
+    # todo: validations here
+    extension = f.filename.split('.')[1].lower()
+    if extension not in tuple('jpg jpe jpeg png gif svg bmp'.split()):
+        return upload_fail(message='只能上传图片！')
+    f.save(os.path.join('/static/img/upload/post_pic', f.filename))
+    url = url_for('blog.uploaded_files', filename=f.filename)
+    return upload_success(url=url)

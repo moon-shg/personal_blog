@@ -6,6 +6,8 @@ from flask_mail import Mail
 from flask_login import LoginManager
 from flask_moment import Moment
 from flask_uploads import UploadSet, configure_uploads, patch_request_class
+from flask_ckeditor import CKEditor
+from flask_wtf import CSRFProtect
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
@@ -15,6 +17,8 @@ login_manager = LoginManager()
 login_manager.login_view = 'auth.login'  # 设置登录页面的 endpiont
 avatars = UploadSet('AVATAR')
 post_img = UploadSet('POSTIMG')
+ckeditor = CKEditor()
+csrf = CSRFProtect()
 
 
 def create_app(config_name):
@@ -31,6 +35,8 @@ def create_app(config_name):
     # 配置flask-uploads
     configure_uploads(app, (avatars, post_img))
     patch_request_class(app, 3*1024*1024)  # 设置上传文件最大为2mb
+    ckeditor.init_app(app)
+    csrf.init_app(app)
 
 
     # 注册蓝本

@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 
+    {#  CKEditor - Code Snippet  #}
+    {{ ckeditor.load_code_theme() }}
     <link rel="shortcut icon" href="{{ url_for('static', filename='potato_100px.png') }}">
     {% block styles %}
     {# inspinia - style.css  #}
@@ -28,6 +30,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='plugins/github-markdown/css/github-markdown.css') }}">
     {# custom.css #}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
 
     {% endblock %}
@@ -61,6 +65,10 @@
     <script src="{{ url_for('static', filename='plugins/social-share/js/social-share.min.js') }}"></script>
     {# sweetalert.js #}
     <script src="{{ url_for('static', filename='plugins/sweetalert/sweetalert.min.js') }}"></script>
+    {# CKEditor.js   #}
+    <script src="{{ url_for('static', filename='plugins/ckeditor/ckeditor.js') }}"></script>
+
+    <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {#script#}
     {% block scripts %}
         <script>

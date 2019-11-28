@@ -24,6 +24,12 @@ class Config:
     # 文章头图
     UPLOADED_POSTIMG_DEST = os.path.join(basedir, 'app/static/img/upload/post_img')
     UPLOADED_POSTIMG_ALLOW = IMAGES
+    # CKEditor
+    CKEDITOR_FILE_UPLOADER = 'blog.upload'
+    CKEDITOR_ENABLE_CODESNIPPET = True
+    CKEDITOR_EXTRA_PLUGINS = ['codesnippet', 'filebrowser', 'popup', 'filetools', 'markdown']
+    CKEDITOR_SERVE_LOCAL = True
+    CKEDITOR_ENABLE_CSRF = True
 
 
     @staticmethod
