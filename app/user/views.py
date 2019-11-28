@@ -3,7 +3,7 @@ import os
 from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
 from flask_uploads import UploadNotAllowed
-from ..models import User, Permission, Role, Comment
+from ..models import User, Permission, Role, Comment, Like
 from .forms import EditProfileForm, EditProfileAdminForm
 from app import db, avatars
 from ..decorators import admin_required
@@ -99,3 +99,15 @@ def my_comments():
         page, per_page=5, error_out=False)
     comments = pagination.items
     return render_template('user/my_comments.html', user=user, page=page, pagination=pagination, comments=comments)
+
+
+# 管理收藏文章
+@user_page.route('/my-likes')
+@login_required
+def my_likes():
+    user = current_user._get_current_object()
+    page = request.args.get('page', 1, type=int)
+    pagination = user.likes.order_by(Like.timestamp.desc()).paginate(
+        page, per_page=5, error_out=False)
+    likes = pagination.items
+    return render_template('user/my_likes.html', user=user, page=page, pagination=pagination, likes=likes)

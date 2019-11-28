@@ -64,10 +64,14 @@
             {% if not current_user.liked(post) %}
                 <form method="post" action="{{ url_for('blog.post', id=post.id) }}">
                     {{ form3.hidden_tag() }}
-                    {{ form3.submit_like_post(class="btn btn-danger btn-circle btn-outline") }}
+                    {{ form3.submit_like_post(class="btn g-brd-gray-light-v3 g-color-red--hover g-brd-red--hover g-rounded-50 g-pa-7-16 ", value="收藏文章") }}
+                </form>
+            {% else %}
+                <form method="post" action="{{ url_for('blog.post', id=post.id) }}">
+                    {{ form4.hidden_tag() }}
+                    {{ form4.submit_dislike_post(class="btn g-brd-gray-light-v3 g-color-yellow--hover g-brd-yellow--hover g-rounded-50 g-pa-7-16", value='取消收藏') }}
                 </form>
             {% endif %}
-{#            TODO:add dislike#}
         {% endif %}
     </div>
 {#    social-share #}

@@ -56,13 +56,13 @@
                             <i class="fa fa-edit g-pos-rel g-mx-10">&nbsp;编辑</i>
                         </a>
                     </li>
+                    {% endif %}
 {#              reply  #}
                     <li class="list-inline-item">
                         <a href="#comment{{ comment.id | string }}" data-toggle="modal" class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" role="button">
                             <i class="fa fa-reply g-pos-rel g-mx-10">&nbsp;回复</i>
                         </a>
                     </li>
-                    {% endif %}
                 </ul>
             </div>
 {#        comment moderate#}

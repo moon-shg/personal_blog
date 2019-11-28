@@ -300,3 +300,12 @@ body.body-small .vote-icon {
 .small-chat-box .form-chat {
   padding: 10px 10px;
 }
+
+/* mylikes page*/
+.hr-line-dashed {
+  border-top: 1px dashed #e7eaec;
+  color: #ffffff;
+  background-color: #ffffff;
+  height: 1px;
+  margin: 20px 0;
+}

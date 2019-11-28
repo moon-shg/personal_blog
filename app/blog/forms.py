@@ -53,3 +53,7 @@ class CommentEditForm(RenderForm):
 # 收藏文章
 class LikePostForm(RenderForm):
     submit_like_post = SubmitField()
+
+# 取消收藏
+class DislikePostForm(RenderForm):
+    submit_dislike_post = SubmitField()
