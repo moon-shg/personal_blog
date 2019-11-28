@@ -14,6 +14,7 @@ moment = Moment()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'  # 设置登录页面的 endpiont
 avatars = UploadSet('AVATAR')
+post_img = UploadSet('POSTIMG')
 
 
 def create_app(config_name):
@@ -28,8 +29,8 @@ def create_app(config_name):
     login_manager.init_app(app)
     moment.init_app(app)
     # 配置flask-uploads
-    configure_uploads(app, avatars)
-    patch_request_class(app, 2*1024*1024)  # 设置上传文件最大为2mb
+    configure_uploads(app, (avatars, post_img))
+    patch_request_class(app, 3*1024*1024)  # 设置上传文件最大为2mb
 
 
     # 注册蓝本

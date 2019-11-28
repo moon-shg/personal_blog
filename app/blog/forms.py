@@ -1,11 +1,12 @@
 from ..main.forms import RenderForm
-from wtforms import SubmitField, StringField, TextAreaField, SelectField
-from wtforms.validators import DataRequired, Length, EqualTo
+from wtforms import SubmitField, StringField, TextAreaField, SelectField, FileField
+from wtforms.validators import DataRequired, Length
 from ..models import Category
 
 
 # 文章修改
 class PostEditForm(RenderForm):
+    image = FileField()
     title = StringField(label='标题', validators=[DataRequired(), Length(1, 255)])
     summary = StringField(label='概述')
     category = SelectField(label="文章分类", coerce=int)

@@ -236,6 +236,8 @@ class Post(db.Model):
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
     # 被收藏
     liked = db.relationship('Like', backref='post', lazy='dynamic', cascade='all, delete-orphan')
+    # 文章头图
+    image = db.Column(db.String(128))
 
     # 创建博客时，设置默认分类
     def __int__(self, **kwargs):

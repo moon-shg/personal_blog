@@ -1,10 +1,11 @@
 from . import blog
-from app import db
+from app import db, post_img
 from ..models import Post, Permission, Category, Comment
 from flask import render_template, abort, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_required
 from .forms import PostEditForm, CommentForm, CommentEditForm, LikePostForm, DislikePostForm
 from app.decorators import permission_require
+from flask_uploads import UploadNotAllowed
 
 
 # 博客地址
@@ -61,6 +62,14 @@ def edit(id):
     if current_user != post.author and not current_user.can(Permission.ADMIN):
         abort(403)
     form = PostEditForm()
+    # 处理文章头图
+    if request.method == 'POST' and 'image' in request.files:
+        try:
+            filename = post_img.save(request.files['image'])
+        except UploadNotAllowed:
+            pass
+        else:
+            post.image = url_for("static", filename='img/upload/post_img/'+filename)
     # 处理二级表单
     if request.method == 'POST' and not form.submit.data:
         data = request.get_json()
@@ -85,8 +94,6 @@ def edit(id):
     form.summary.data = post.summary
     form.body.data = post.body
     return render_template("blog/edit_post.html", form=form, post=post)
-
-
 
 
 # 管理评论

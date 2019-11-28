@@ -8,8 +8,19 @@
 </div>
 <div class="mb-5">
     {% if current_user.can(Permission.WRITE) %}
-        <form method="post">
+        <form method="post" enctype=multipart/form-data>
             {{ form.hidden_tag() }}
+            <div class="form-row mb-2">
+                 <p class="g-font-size-16 g-font-weight-600 g-px-5 g-mb-7">文章头图</p>
+                <div class="col-12 mb-2">
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type=file class="custom-file-input" id="upload" name=image >
+                            <label class="custom-file-label" for="upload" data-browse="浏览文件">选择文件</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="form-row mb-2">
                 <div class="col-md-6 mb-2">
                     {{ form.title.label(class="g-font-size-16 g-font-weight-600 ") }}
@@ -44,4 +55,11 @@
         {#let csrf = "{{ csrf_token() }}";#}
     </script>
     <script src="{{ url_for('static', filename='js/custom.js') }}" charset="UTF-8"></script>
+{#    文件表单选择文件后更改名字 #}
+    <script>
+        $('.custom-file-input').on('change', function() {
+            let fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+    </script>
 {% endblock %}
