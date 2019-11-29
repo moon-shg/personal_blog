@@ -3,7 +3,7 @@ from . import main
 from app import db
 from .forms import PostForm
 from flask_login import current_user
-from ..models import User, Role, Permission, Post
+from ..models import User, Role, Permission, Post, Category
 
 # 主页面
 @main.route('/', methods=['GET', 'POST'])

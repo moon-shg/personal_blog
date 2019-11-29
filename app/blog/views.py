@@ -1,13 +1,25 @@
 from . import blog
 from app import db, post_img
 from ..models import Post, Permission, Category, Comment
-from flask import render_template, abort, flash, redirect, url_for, request, jsonify, send_from_directory
+from flask import render_template, abort, flash, redirect, url_for, request, jsonify, send_from_directory, current_app
 from flask_login import current_user, login_required
-from .forms import PostEditForm, CommentForm, CommentEditForm, LikePostForm, DislikePostForm
+from .forms import PostEditForm, CommentForm, CommentEditForm, LikePostForm, DislikePostForm, PostForm
 from app.decorators import permission_require
 from flask_uploads import UploadNotAllowed
 from flask_ckeditor import upload_success, upload_fail
 import os
+
+
+# 处理文章头图
+def save_post_img():
+    if request.method == 'POST' and 'image' in request.files:
+        try:
+            filename = post_img.save(request.files['image'])
+        except UploadNotAllowed:
+            pass
+        else:
+            post.image = url_for("static", filename='img/upload/post_img/'+filename)
+
 
 
 # 博客地址
@@ -45,7 +57,7 @@ def post(id):
     if form3.validate_on_submit() and form3.submit_like_post.data:
         user.like(post)
         db.session.commit()
-        flash('已收藏文章！')
+        flash('已收藏文章！', 'success')
         return redirect(url_for('blog.post', id=post.id))
     # 取消收藏
     if form4.validate_on_submit() and form4.submit_dislike_post.data:
@@ -56,6 +68,38 @@ def post(id):
     return render_template('blog/post.html', post=post, comments=comments, form=form,
                            form2=form2, form3=form3, form4=form4, type_flag=type_flag)
 
+# 发布博客
+@blog.route('/new-post', methods=['GET', 'POST'])
+@login_required
+def new_post():
+    if not current_user.can(Permission.ADMIN):
+        abort(403)
+    post = Post()
+    form = PostForm()
+    # 处理文章头图
+    save_post_img()
+    # 处理二级表单
+    if request.method == 'POST' and not form.submit.data:
+        data = request.get_json()
+        name = data['name']
+        category = Category.query.filter_by(name=name).first()
+        sub_categories = {category.id: category.name for category in Category.query.filter_by(parent_id=category.id).all()}
+        return jsonify(sub_categories)
+    if form.validate_on_submit():
+        post.author_id = current_user.id
+        post.title = form.title.data
+        if form.sub_category.data:
+            post.category = Category.query.get(form.sub_category.data)
+        else:
+            post.category = Category.query.get(form.category.data)
+        post.summary = form.summary.data
+        post.body = form.body.data
+        db.session.add(post)
+        db.session.commit()
+        flash('博客发表')
+        return redirect(url_for('.post', id=post.id))
+    return render_template("blog/new_post.html", form=form)
+
 # 编辑博客
 @blog.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -65,19 +109,14 @@ def edit(id):
         abort(403)
     form = PostEditForm()
     # 处理文章头图
-    if request.method == 'POST' and 'image' in request.files:
-        try:
-            filename = post_img.save(request.files['image'])
-        except UploadNotAllowed:
-            pass
-        else:
-            post.image = url_for("static", filename='img/upload/post_img/'+filename)
+    save_post_img()
     # 处理二级表单
     if request.method == 'POST' and not form.submit.data:
         data = request.get_json()
         name = data['name']
         category = Category.query.filter_by(name=name).first()
-        sub_categories = {category.id: category.name for category in Category.query.filter_by(parent_id=category.id).all()}
+        sub_categories = {category.id: category.name for category in
+                          Category.query.filter_by(parent_id=category.id).all()}
         return jsonify(sub_categories)
     if form.validate_on_submit():
         post.title = form.title.data
@@ -96,6 +135,22 @@ def edit(id):
     form.summary.data = post.summary
     form.body.data = post.body
     return render_template("blog/edit_post.html", form=form, post=post)
+
+
+# 博客分类页面
+@blog.route('/post/<category_name>')
+def category_posts(category_name):
+    category = Category.query.filter_by(name=category_name).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.filter_by(category_id=category.id).order_by(Post.timestamp.desc()).paginate(
+        page, per_page=9, error_out=False)
+    posts = pagination.items
+    no_post_flag = False
+    if pagination.total == 0:
+        flash('抱歉，该分类下暂时没有文章。', 'warning')
+        no_post_flag = True
+    return render_template('blog/category_post.html',
+           category=category, posts=posts, page=page, pagination=pagination, no_post_flag=no_post_flag)
 
 
 # 管理评论

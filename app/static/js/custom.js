@@ -1,7 +1,7 @@
 //多级表单联动
 function Select(choose, id, register_url) {
     let data;
-    // let csrftoekn = csrf;
+    // let csrftoken = csrf;
     let select = document.getElementById(choose);
     $(id).html("");  //每次从星选择当前列表，就亲空下一级列表框
     for (let i=0;i<select.length;i++){
@@ -12,7 +12,7 @@ function Select(choose, id, register_url) {
             };
             $.ajax({          // 发起ajax请求
                 url:register_url,
-                // headers:{"X-CSRFToken": csrftoekn }, //加上csrf验证头
+                // headers:{"X-CSRFToken": csrftoken }, //加上csrf验证头
                 type:"POST",
                 data:JSON.stringify(data),
                 contentType:"application/json; charset=UTF-8",

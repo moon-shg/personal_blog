@@ -29,7 +29,6 @@ class Config:
     CKEDITOR_ENABLE_CODESNIPPET = True
     CKEDITOR_EXTRA_PLUGINS = ['codesnippet', 'filebrowser', 'popup', 'filetools', 'markdown']
     CKEDITOR_SERVE_LOCAL = True
-    CKEDITOR_ENABLE_CSRF = True
 
 
     @staticmethod

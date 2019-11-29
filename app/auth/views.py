@@ -18,7 +18,7 @@ def login():
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
                 next = url_for('main.index')
-                flash('欢迎回来！')
+                flash('欢迎回来！', 'success')
             return redirect(next)
         flash('邮箱或密码错误！')
     return render_template('auth/login.html', form=form)

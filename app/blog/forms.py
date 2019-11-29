@@ -5,13 +5,37 @@ from ..models import Category
 from flask_ckeditor import CKEditorField
 
 
+# 发表文章
+class PostForm(RenderForm):
+    image = FileField()
+    title = StringField(label='标题', validators=[DataRequired(), Length(1, 255)])
+    summary = StringField(label='概述')
+    category = SelectField(label="文章分类", coerce=int)
+    sub_category = SelectField(label="二级分类", coerce=int)
+    body = CKEditorField(label="正文", validators=[DataRequired()])
+    submit = SubmitField(label='提交')
+
+    # 添加 分类选择表单 category 的值
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.category.choices = [(0, '')]  # 给表单设置初始空值，以触发表单onchange事件
+        self.sub_category.choices = [(0, '')]
+        for category in Category.query.order_by(Category.id).all():
+            # 初始化时将一级分类和二级分类区分开，分别给两个字段初始化
+            if category.parent is None:
+                self.category.choices.append((category.id, category.name))
+            else:
+                self.sub_category.choices.append((category.id, category.name))
+
+
+
 # 文章修改
 class PostEditForm(RenderForm):
     image = FileField()
     title = StringField(label='标题', validators=[DataRequired(), Length(1, 255)])
     summary = StringField(label='概述')
     category = SelectField(label="文章分类", coerce=int)
-    sub_category = SelectField(label="文章分类", coerce=int)
+    sub_category = SelectField(label="二级分类", coerce=int)
     body = CKEditorField(label="正文", validators=[DataRequired()])
     # body = TextAreaField(label="正文", validators=[DataRequired()],
     #                      render_kw={'data-provide': "markdown", 'rows': '10',
