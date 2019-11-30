@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% from "_macros.html" import pagination_widget %}
+
+{% block title %}Potato Cookbook - 归档 {{ year }}年{% endblock %}
+
+{% block content %}
+<div class="g-bg-gray-light-v5">
+    <div class="container g-py-50">
+    {% include "blog/_post_grid.html" %}
+    {{ pagination_widget(pagination, 'blog.archive_year', year=year) }}
+    </div>
+</div>
+{% endblock %}

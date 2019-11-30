@@ -8,7 +8,7 @@ from app.decorators import permission_require
 from flask_uploads import UploadNotAllowed
 from flask_ckeditor import upload_success, upload_fail
 import os
-from sqlalchemy import or_
+from sqlalchemy import extract
 
 
 # 处理文章头图
@@ -165,6 +165,28 @@ def category_posts(category_name):
         no_post_flag = True
     return render_template('blog/category_post.html',
                            category=category, posts=posts, page=page, pagination=pagination, no_post_flag=no_post_flag)
+
+
+# 博客时间归档页面(月)
+@blog.route('/<int:year>/<int:month>')
+def archive_month(year, month):
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.filter(extract('year', Post.timestamp) == year,
+                                   extract('month', Post.timestamp) == month
+                                   ).order_by(Post.timestamp.desc()).paginate(
+        page, per_page=9, error_out=False)
+    posts = pagination.items
+    return render_template('blog/archives_month.html', posts=posts, page=page, pagination=pagination, year=year, month=month)
+
+
+# 博客时间归档页面(年)
+@blog.route('/<int:year>')
+def archive_year(year):
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.filter(extract('year', Post.timestamp) == year).order_by(Post.timestamp.desc()).paginate(
+        page, per_page=9, error_out=False)
+    posts = pagination.items
+    return render_template('blog/archives_year.html', posts=posts, page=page, pagination=pagination, year=year)
 
 
 # 管理评论
