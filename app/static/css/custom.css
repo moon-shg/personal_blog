@@ -309,3 +309,10 @@ body.body-small .vote-icon {
   height: 1px;
   margin: 20px 0;
 }
+
+/* gotoTop */
+#gotoTop{
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+}

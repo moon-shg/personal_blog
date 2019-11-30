@@ -177,4 +177,36 @@
 </div>
 {% endblock %}
 
+{% block gototop %}
+    <button id="gotoTop" class="fa fa-2x fa-arrow-up fa-border g-color-gray-dark-v4 g-color-primary--hover"></button>
+{% endblock %}
 
+{% block scripts %}
+{{ super() }}
+    <script>
+    {# gotoTop #}
+        function gotoTop(minHeight) {
+            // 先将#gotoTop隐藏
+            $("#gotoTop").hide()
+            // 定义点击返回顶部图标后，向上滚动的动画
+            $("#gotoTop").click(
+                function () { $('body,html').animate({scrollTop:0}, 'slow');
+                return false;
+                });
+            // 获取页面的最小高度，无法传入值则默认为600像素
+            minHeight? minHeight = minHeight:minHeight = 500;
+            // 为窗口的scroll时间绑定处理函数
+            $(window).scroll(function () {
+                // 获取窗口滚动条的垂直滚动距离
+                let s = $(window).scrollTop();
+                // 当窗口的滚动条的垂直滚动距离大于页面最小高度时，让返回顶部的图标渐现，否则渐隐
+                if( s > minHeight){
+                    $("#gotoTop").fadeIn();
+                }else{
+                    $("#gotoTop").fadeOut();
+                }
+            });
+        }
+        gotoTop();
+    </script>
+{% endblock %}

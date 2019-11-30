@@ -34,6 +34,8 @@
     {{ toastr.include_jquery() }}
     {{ toastr.include_toastr_css() }}
     {{ toastr.message() }}
+    {# fancybox.css #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fancybox/css/jquery.fancybox.css') }}">
 
     {% endblock %}
 
@@ -41,17 +43,19 @@
     {% endblock %}
   </head>
   <body>
-    {#page-top#}
+    {# page-top #}
     {% block top %}{% endblock %}
     {% block navbar %}{% endblock %}
-    {#flash#}
+    {# flash #}
     {% block flash %}{% endblock %}
-    {#content#}
+    {# content #}
     {% block content %}
     {% endblock %}
 
-    {#footer#}
+    {# footer #}
     {% block footer %}{% endblock %}
+    {# gotoTop #}
+    {% block gototop %}{% endblock %}
 
     <!-- Optional JavaScript -->
     {{ bootstrap.load_js() }}
@@ -66,6 +70,8 @@
     <script src="{{ url_for('static', filename='plugins/social-share/js/social-share.min.js') }}"></script>
     {#  toastr.js  #}
     {{ toastr.include_toastr_js() }}
+    {# fancybox.js #}
+    <script src="{{ url_for('static', filename='plugins/fancybox/js/jquery.fancybox.min.js') }}"></script>
 
     {#script#}
     {% block scripts %}
