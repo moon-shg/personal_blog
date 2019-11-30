@@ -33,6 +33,10 @@ def post(id):
     post = Post.query.get_or_404(id)
     comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.timestamp).all()
     user = current_user._get_current_object()
+    # 打开后浏览数+1
+    post.views += 1
+    db.session.add(post)
+    db.session.commit()
     # 文章评论
     if form.validate_on_submit() and form.submit_comment.data:
         comment = Comment(

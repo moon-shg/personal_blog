@@ -68,13 +68,13 @@
                 {% block sidebars %}
                     {# archives #}
                     {% block archives %}
-                    <div CLASS="g-my-30">
+                    <div class="g-my-30">
                         <div class="u-heading-v3-1 g-mb-30">
                             <h5 class="u-heading-v3__title g-color-primary g-brd-primary">归档</h5>
                         </div>
                         <ul class="list-unstyled g-font-size-13 mb-0">
                             {% for year, count in year_posts %}
-                            <li>
+                            <li class="g-my-8">
                                 <i data-toggle="collapse" data-target="#y{{ year }}" class="fa fa-toggle-down mr-2 g-color-primary"></i>
                                 <a href="{{ url_for('blog.archive_year', year=year) }}" class="u-link-v5 g-color-gray-dark-v1 g-color-red--hover  g-pl-0 g-pl-7--hover g-transition-0_3 g-py-7">{{ year }}年({{ count }}篇)</a>
                                 <ul class="list-unstyled g-px-20 mb-0 collapse" id="y{{ year | string }}">
@@ -90,6 +90,47 @@
                         </ul>
                     </div>
                     {% endblock %}
+                    {# hot posts #}
+                    {% block hot_posts %}
+                    <div class="g-my-30">
+                        <div class="u-heading-v3-1 g-mb-30">
+                            <h5 class="u-heading-v3__title g-color-primary g-brd-primary">热门文章</h5>
+                        </div>
+                        <ul class="list-unstyled">
+                            {% for hot_post in hot_posts %}
+                            <li>
+                                <div class="media">
+                                    <a href="{{ url_for('blog.post', id=hot_post.id) }}" class="shadow">
+                                        <img src="{{ hot_post.image}}" class="img-fluid img-thumbnail g-width-60 g-height-60">
+                                    </a>
+                                    <div class="media-body g-mb-25 g-ml-15 g-mt-7">
+                                        <a href="{{ url_for('blog.post', id=hot_post.id) }}" class="u-link-v5 g-color-gray-dark-v1 g-color-primary--hover">{{ hot_post.title }}</a>
+                                        <ul class="list-inline g-font-size-12 g-color-gray-dark-v4">
+                                            <li class="list-inline-item">{{ moment(hot_post.timestamp).fromNow(refresh=True) }}</li>
+                                            <li class="list-inline-item"><span class="fa fa-eye"></span> {{ hot_post.views }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endblock hot_posts %}
+                    {# random posts #}
+                    <div class="g-my-30">
+                        <div class="u-heading-v3-1 g-mb-30">
+                            <h5 class="u-heading-v3__title g-color-primary g-brd-primary">随机文章</h5>
+                        </div>
+                        <ul class="list-unstyled">
+                            {% for random_post in random_posts %}
+                                <li class="g-pb-10 g-mb-12 g-brd-bottom g-brd-gray-light-v3">
+                                    <span><i class="fa fa-angle-double-right"></i></span>
+                                    <a href="{{ url_for('blog.post', id=random_post.id) }}"
+                                       class="u-link-v5 g-color-gray-dark-v1 g-color-primary--hover g-ml-5 g-pl-7--hover g-transition-0_3 g-py-7">{{ random_post.title }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 {% endblock %}
             </div>
         {% endblock page_content %}

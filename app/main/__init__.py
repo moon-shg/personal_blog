@@ -37,3 +37,17 @@ def inject_archive():
     for year_archive in year_archives:
         year_posts.append((year_archive[0], year_archive[1]))
     return dict(year_posts=year_posts, month_posts=month_posts)
+
+# 热门文章
+@main.app_context_processor
+def inject_hot_posts():
+    # 以浏览数views排序，并取前五篇文章
+    hot_posts = Post.query.order_by(Post.views.desc()).limit(5).all()
+    return dict(hot_posts=hot_posts)
+
+
+# 随机文章
+@main.app_context_processor
+def inject_random_posts():
+    random_posts = Post.query.order_by(func.random()).limit(6).all()
+    return dict(random_posts=random_posts)
