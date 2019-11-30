@@ -28,7 +28,8 @@
             <ul class="list-inline mb-0">
                 <li class="list-inline-item">
                     <span><i class="fa fa-map-signs"></i>
-                    <a href="#" class="g-color-red--hover text-decoration-none" data-toggle="tooltip" data-placement="top" title="分类"> &nbsp;{{ post.category.name }}</a>
+                    <a href="{{ url_for('blog.category_posts', category_name=post.category.parent.name) }}" class="g-color-red--hover text-decoration-none" data-toggle="tooltip" data-placement="top" title="分类"> &nbsp;{{ post.category.parent.name }}</a>
+                    <a href="{{ url_for('blog.category_posts', category_name=post.category.name) }}" class="g-color-red--hover text-decoration-none" data-toggle="tooltip" data-placement="top" title="分类"> &nbsp;{{ post.category.name }}</a>
                     </span>
                 </li>
             </ul>

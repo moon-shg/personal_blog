@@ -16,7 +16,7 @@
                         <a class="nav-link" href="/">首页 <span class="sr-only">(current)</span></a>
                     </li>
                     {# Category #}
-                    {% for category in Category.query.all() %}
+                    {% for category in Category.query.order_by(Category.default).all() %}
                         {% if not category.parent %}
                             <li class="nav-item dropdown g-pos-rel g-mx-20--lg g-mx-20--xl" data-animation-in="fadeIn" data-animation-out="fadeOut">
                                 {% if category.sub_categories.count() > 0 %}

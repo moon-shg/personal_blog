@@ -7,7 +7,7 @@
 <div class="g-bg-gray-light-v5">
     <div class="container g-py-50">
     {% if no_post_flag == True %}
-    <h3 class="text-center"> 抱歉，该分类下展示没有文章。 </h3>
+    <h3 class="text-center"> 抱歉，该分类下暂时没有文章。 </h3>
     {% endif %}
         <div class="grid row" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200}'>
             {% for post in posts %}
@@ -23,17 +23,19 @@
                                 <li class="list-inline-item  ">{{ moment(post.timestamp).format('l') }}</li>
                             </ul>
                             <div class="">
-                                <h4><strong>{{ post.title }}</strong></h4>
+                                <a class="g-font-size-22 g-color-gray-dark-v2 g-color-primary--hover text-decoration-none g-transition-0_3 g-cursor-pointer "
+                                href="{{ url_for('blog.post', id=post.id) }}"><strong>{{ post.title }}</strong></a>
                                 <p class="g-color-gray-dark-v4">{{ post.summary }}</p>
                                 <ul class="list-inline">
                                     {% if post.category.parent %}
                                     <li class="list-inline-item">
                                         <a class="g-color-cyan g-bg-cyan-opacity-0_1 g-bg-cyan--hover g-color-white--hover g-rounded-50 g-py-4 g-px-15 u-tags-v1"
-                                           href="#">{{ post.category.parent.name }}</a>
+                                           href="{{ url_for('blog.category_posts', category_name=post.category.parent.name) }}">{{ post.category.parent.name }}</a>
                                     </li>
                                     {% endif %}
                                     <li class="list-inline-item">
-                                        <a class="g-color-lightred g-bg-lightred-opacity-0_1 g-bg-lightred--hover g-color-white--hover g-rounded-50 g-py-4 g-px-15 u-tags-v1" href="#">
+                                        <a class="g-color-lightred g-bg-lightred-opacity-0_1 g-bg-lightred--hover g-color-white--hover g-rounded-50 g-py-4 g-px-15 u-tags-v1"
+                                           href="{{ url_for('blog.category_posts', category_name=post.category.name) }}">
                                             {{ post.category.name }}</a>
                                     </li>
                                 </ul>

@@ -58,7 +58,7 @@
     <div class="g-mt-15 g-mb-30 d-flex justify-content-between">
         <h6 class="g-color-gray-dark-v1 g-mb-15">
             <strong class="g-color-primary g-mr-15">分类:</strong>
-            <a class="btn btn-sm btn-outline-primary" href="#">{{ post.category.name }}</a>
+            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('blog.category_posts', category_name=post.category.name) }}">{{ post.category.name }}</a>
         </h6>
         {% if current_user.is_authenticated %}
             {% if not current_user.liked(post) %}

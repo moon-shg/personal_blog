@@ -8,6 +8,7 @@ from app.decorators import permission_require
 from flask_uploads import UploadNotAllowed
 from flask_ckeditor import upload_success, upload_fail
 import os
+from sqlalchemy import or_
 
 
 # 处理文章头图
@@ -18,8 +19,7 @@ def save_post_img():
         except UploadNotAllowed:
             pass
         else:
-            post.image = url_for("static", filename='img/upload/post_img/'+filename)
-
+            post.image = url_for("static", filename='img/upload/post_img/' + filename)
 
 
 # 博客地址
@@ -68,6 +68,7 @@ def post(id):
     return render_template('blog/post.html', post=post, comments=comments, form=form,
                            form2=form2, form3=form3, form4=form4, type_flag=type_flag)
 
+
 # 发布博客
 @blog.route('/new-post', methods=['GET', 'POST'])
 @login_required
@@ -83,7 +84,8 @@ def new_post():
         data = request.get_json()
         name = data['name']
         category = Category.query.filter_by(name=name).first()
-        sub_categories = {category.id: category.name for category in Category.query.filter_by(parent_id=category.id).all()}
+        sub_categories = {category.id: category.name for category in
+                          Category.query.filter_by(parent_id=category.id).all()}
         return jsonify(sub_categories)
     if form.validate_on_submit():
         post.author_id = current_user.id
@@ -99,6 +101,7 @@ def new_post():
         flash('博客发表')
         return redirect(url_for('.post', id=post.id))
     return render_template("blog/new_post.html", form=form)
+
 
 # 编辑博客
 @blog.route('/edit/<int:id>', methods=['GET', 'POST'])
@@ -142,15 +145,26 @@ def edit(id):
 def category_posts(category_name):
     category = Category.query.filter_by(name=category_name).first_or_404()
     page = request.args.get('page', 1, type=int)
-    pagination = Post.query.filter_by(category_id=category.id).order_by(Post.timestamp.desc()).paginate(
-        page, per_page=9, error_out=False)
+    sub_categories = Category.query.filter_by(parent_id=category.id).all()  # 查询二级分类
+    categories_list = [sub_category.id for sub_category in sub_categories]  # 二级子分类id列表
+    categories_list.append(category.id)  # 分类列表中添加自己(一级分类)
+    # 一级分类 并且有子分类
+    if not category.parent_id and sub_categories:
+        pagination = Post.query.filter(
+            Post.category_id.in_(categories_list)).order_by(
+            Post.timestamp.desc()).paginate(
+            page, per_page=9, error_out=False)
+    # 一级分类 但没有子分类 ； 二级分类
+    else:
+        pagination = Post.query.filter_by(category_id=category.id).order_by(Post.timestamp.desc()).paginate(
+            page, per_page=9, error_out=False)
     posts = pagination.items
     no_post_flag = False
     if pagination.total == 0:
         flash('抱歉，该分类下暂时没有文章。', 'warning')
         no_post_flag = True
     return render_template('blog/category_post.html',
-           category=category, posts=posts, page=page, pagination=pagination, no_post_flag=no_post_flag)
+                           category=category, posts=posts, page=page, pagination=pagination, no_post_flag=no_post_flag)
 
 
 # 管理评论
@@ -164,6 +178,7 @@ def moderate(id):
         page, per_page=10, error_out=False)
     comments = pagination.items
     return render_template('blog/comment_moderate.html', post=post, comments=comments, pagination=pagination, page=page)
+
 
 # 解除屏蔽
 @blog.route('/moderate/enable/<int:id>')
@@ -194,6 +209,7 @@ def moderate_disable(id):
 def uploaded_files(filename):
     path = '/static/img/upload/post_pic'
     return send_from_directory(path, filename)
+
 
 @blog.route('/upload', methods=['POST'])
 def upload():
