@@ -10,9 +10,9 @@
             <img src="{{ url_for('static', filename='logo.png') }}" height="40" class="d-inline-block align-top" alt="">
         </a>
         {# Search Bar #}
-        <form class="g-width-60x g-width-45x--md" >
+        <form class="g-width-60x g-width-45x--md" action="{{ url_for('main.search') }}" method="post">
             <div class="input-group input-group-lg">
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                <input name="search" class="form-control" type="search" placeholder="Search" >
                 <div class="input-group-append">
                     <button class="btn btn-outline-success my-sm-0" type="submit">
                         <span class="fa fa-search"></span>
@@ -64,7 +64,7 @@
             <div class="col-lg-9">
                 {% block articles %}{% endblock %}
             </div>
-            <div class="col-lg-3 border">
+            <div class="col-lg-3">
                 {% block sidebars %}
                     {# archives #}
                     {% block archives %}

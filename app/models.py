@@ -6,6 +6,8 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from datetime import datetime
 from markdown import markdown
 import bleach
+from jieba.analyse.analyzer import ChineseAnalyzer
+import flask_whooshalchemyplus
 
 
 # 用户组权限
@@ -222,6 +224,8 @@ def load_user(user_id):
 # 博客
 class Post(db.Model):
     __tablename__ = 'posts'
+    __searchable__ = ['body', 'title', 'summary']  # 设定可以用于搜索的字段
+    __analyzer__ = ChineseAnalyzer()  # 搜索的中文支持。添加本地自定义分析器进行索引
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     summary = db.Column(db.UnicodeText)
@@ -243,7 +247,7 @@ class Post(db.Model):
     def __int__(self, **kwargs):
         super(Post, self).__init__(**kwargs)
         if self.category is None:
-            self.category = Category.queyr.filter_by(default=True).first()
+            self.category = Category.query.filter_by(default=True).first()
 
     # 在服务器端将post.body中的markdown文本转换成html格式
     @staticmethod
@@ -270,7 +274,6 @@ class Post(db.Model):
 
     def __repr__(self):
         return f'<文章：{self.title}>'
-
 
 # SQLAlchemy ‘set’事件监听程序，当body字段设了新值，函数就会自动被调用。
 db.event.listen(Post.body, 'set', Post.on_changed_body)

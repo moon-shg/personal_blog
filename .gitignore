@@ -48,3 +48,6 @@ venv
 
 # upload files
 app/static/img/upload
+
+# search index
+whoosh_index

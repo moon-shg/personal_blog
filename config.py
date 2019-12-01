@@ -30,6 +30,8 @@ class Config:
     CKEDITOR_EXTRA_PLUGINS = ['codesnippet', 'filebrowser', 'popup', 'filetools', 'markdown']
     CKEDITOR_SERVE_LOCAL = True
     CKEDITOR_CODE_THEME = 'github'
+    # 搜索 每页显示结果数
+    SEARCH_RESULTS_PER_PAGE = int(os.environ.get('SEARCH_RESULTS_PER_PAGE', '7'))
 
 
     @staticmethod

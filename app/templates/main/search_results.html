@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% from "_macros.html" import pagination_widget %}
+
+{% block title %}Potato Cookbook - 搜索“{{ search_words }}”{% endblock %}
+
+{% block articles %}
+    {% include "_post.html" %}
+    {{ pagination_widget(pagination, 'main.search_results', search_words=search_words) }}
+{% endblock %}

@@ -4,8 +4,7 @@ main = Blueprint('main', __name__)
 
 from . import views, errors
 from ..models import Permission, Category, Post
-from app import db
-from sqlalchemy import extract, func, and_
+from sqlalchemy import extract, func
 from app import db
 
 

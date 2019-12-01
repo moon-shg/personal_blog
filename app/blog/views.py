@@ -9,6 +9,7 @@ from flask_uploads import UploadNotAllowed
 from flask_ckeditor import upload_success, upload_fail
 import os
 from sqlalchemy import extract
+import flask_whooshalchemyplus
 
 
 # 处理文章头图
@@ -94,14 +95,20 @@ def new_post():
     if form.validate_on_submit():
         post.author_id = current_user.id
         post.title = form.title.data
-        if form.sub_category.data:
+        # 如果没有输入一级分类，就设置成默认分类（未分类）
+        if not form.category.data:
+            post.category = Category.query.filter_by(default=True).first()
+        # 如果输入了一级分类和二级分类，就设置成二级分类
+        elif form.sub_category.data:
             post.category = Category.query.get(form.sub_category.data)
+        # 如果只输入了一级分类， 就设置成一级分类
         else:
             post.category = Category.query.get(form.category.data)
         post.summary = form.summary.data
         post.body = form.body.data
         db.session.add(post)
         db.session.commit()
+        flask_whooshalchemyplus.index_one_model(Post)  # 提交文章后 创建搜索索引
         flash('博客发表')
         return redirect(url_for('.post', id=post.id))
     return render_template("blog/new_post.html", form=form)
@@ -135,6 +142,7 @@ def edit(id):
         post.body = form.body.data
         db.session.add(post)
         db.session.commit()
+        flask_whooshalchemyplus.index_one_model(Post)  # 修改文章后 创建搜索索引
         flash('博客已修改成功')
         return redirect(url_for('.post', id=post.id))
     form.title.data = post.title
