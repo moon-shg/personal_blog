@@ -32,5 +32,8 @@ def search_results(search_words):
     pagination = Post.query.whoosh_search(search_words).order_by(Post.timestamp.desc()).paginate(
         page, per_page=current_app.config['SEARCH_RESULTS_PER_PAGE'], error_out=False)
     results = pagination.items
-    flash(f'共有{ results_counts }条结果，当前显示第{ page }页结果', 'success')
+    if results_counts == 0:
+        flash('很抱歉，暂时没有相关文章')
+    else:
+        flash(f'共有{ results_counts }条结果，当前显示第{ page }页结果', 'success')
     return render_template('main/search_results.html', search_words=search_words, posts=results, pagination=pagination)

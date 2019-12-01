@@ -7,7 +7,7 @@ from datetime import datetime
 from markdown import markdown
 import bleach
 from jieba.analyse.analyzer import ChineseAnalyzer
-import flask_whooshalchemyplus
+from app.exceptions import ValidationError
 
 
 # 用户组权限
@@ -201,6 +201,37 @@ class User(db.Model, UserMixin):
             return False
         return self.likes.filter_by(post_id=post.id).first() is not None
 
+    # 支持基于令牌的身份验证
+    def generate_auth_token(self, expiration):
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
+        token = s.dumps({'id': self.id}).decode('utf-8')
+        return token
+
+    # 校验登录令牌
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token.encode('utf-8'))
+        except:
+            return None
+        return User.query.get(data['id'])
+
+    # 将用户转换成 JSON 格式 供 API 使用
+    def to_json(self):
+        json_user = {
+            'url': url_for('api.get_user', id=self.id),
+            'username': self.username,
+            'member_since': self.member_since,
+            'last_seen': self.last_seen,
+            'about_me': self.about_me,
+            'avatar': url_for('api.get_user_avatar', id=self.id),
+            'posts_url': url_for('api.get_posts', id=self.id),
+            'liked_posts_url': url_for('api.get_user_liked_posts', id=self.id),
+            'posts_count': self.posts.count()
+        }
+        return json_user
+
 
 # 匿名用户
 class AnonymousUser(AnonymousUserMixin):
@@ -272,8 +303,46 @@ class Post(db.Model):
             return False
         return self.liked.filter_by(user_id=user.id).first() is not None
 
+    # 将文章转换成 JSON 格式 供 API 使用
+    def to_json(self):
+        json_post = {
+            'url': url_for('api.get_post', id=self.id),
+            'title': self.title,
+            'summary': self.summary,
+            'body': self.body,
+            'body_html': self.body_html,
+            'timestamp': self.timestamp,
+            'views': self.views,
+            'author_url': url_for('api.get_user', id=self.author_id),
+            'category_url': url_for('api.get_category', id=self.category_id),
+            'comments_url': url_for('api.get_post_comments', id=self.id),
+            'comment_count': self.comments.count(),
+            'img_url': url_for('api.get_post_image', id=self.id)
+        }
+        return json_post
+
+    # 从 JSON 格式数据创建博客
+    @staticmethod
+    def from_json(json_post):
+        title = json_post.get('title')
+        if title is None or title == '':
+            raise ValidationError('post does not have a title')
+        summary = json_post.get('summary')
+        body = json_post.get('body')
+        if title is None or title == '':
+            raise ValidationError('post does not have a body')
+        category = Category.query.filter_by(name=json_post.get('category')).first()
+        # 如果没有设置分类，则设置为默认分类
+        if category is None:
+            category_id = Category.query.filter_by(default=True).first().id
+        else:
+            category_id = Category.query.filter_by(name=json_post.get('category')).first().id
+        return Post(title=title, summary=summary, body=body, category_id=category_id)
+
+
     def __repr__(self):
         return f'<文章：{self.title}>'
+
 
 # SQLAlchemy ‘set’事件监听程序，当body字段设了新值，函数就会自动被调用。
 db.event.listen(Post.body, 'set', Post.on_changed_body)
