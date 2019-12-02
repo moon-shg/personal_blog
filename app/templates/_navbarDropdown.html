@@ -1,0 +1,46 @@
+<div class="g-bg-white g-transition-0_3 g-py-10 shadow-sm">
+    <nav class="hs-mega-menu navbar navbar-expand-sm navbar-light bg-light g-bg-white">
+        <div class="container d-flex justify-content-between pl-0 pr-3 pr-sm-0 ">
+            {# logo #}
+            <a class="navbar-brand g-hidden-sm-up p-0" href="/">
+                <img src="{{ url_for('static', filename='logo.png') }}"  height="35" class="d-inline-block align-top" alt="">
+            </a>
+            {# Toggler/collapsibe Button #}
+            <button class="navbar-toggler g-line-height-1 collapsed" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto g-font-weight-600">
+                    {# home page #}
+                    <li class="nav-item active g-mr-20">
+                        <a class="nav-link" href="/">首页 <span class="sr-only">(current)</span></a>
+                    </li>
+                    {# Category #}
+                    {% for category in Category.query.order_by(Category.default).all() %}
+                        {% if not category.parent %}
+                            <li class="nav-item dropdown g-pos-rel g-mx-20--lg g-mx-20--xl" data-animation-in="fadeIn" data-animation-out="fadeOut">
+                                {% if category.sub_categories.count() > 0 %}
+                                    <a class="nav-link dropdown-toggle g-color-aqua--hover g-py-7 g-px-0" id="dropdown_{{ category.id | string }}" role="button" data-toggle="dropdown" href="#">
+                                        {{ category.name }} <span class="fa fa-chevron-down"></span>
+                                    </a>
+                                {% else %}
+                                    <a class="nav-link dropdown-toggle g-color-aqua--hover g-py-7 g-px-0" id="dropdown_{{ category.id | string }}"
+                                       role="button" href="{{ url_for('blog.category_posts', category_name = category.name) }}">
+                                        {{ category.name }}
+                                    </a>
+                                {% endif %}
+                                {% if category.sub_categories.count() > 0 %}
+                                <div class="dropdown-menu border-top-0 g-brd-top g-brd-primary g-brd-top-2 g-mt-18 g-mt-8--lg--scrolling">
+                                    {% for sub_category in category.sub_categories  %}
+                                        <a class="dropdown-item" href="{{ url_for('blog.category_posts', category_name = sub_category.name) }}">{{ sub_category.name }}</a>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>

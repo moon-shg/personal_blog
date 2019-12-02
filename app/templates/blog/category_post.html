@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% from "_macros.html" import pagination_widget %}
+
+{% block title %}Potato Cookbook - {{ category.name }}{% endblock %}
+
+{% block content %}
+<div class="g-bg-gray-light-v5">
+    <div class="container g-py-50">
+    {% if no_post_flag == True %}
+    <h3 class="text-center"> 抱歉，该分类下暂时没有文章。 </h3>
+    {% endif %}
+        <div class="grid row" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200}'>
+            {% for post in posts %}
+                <div class="gird-item col-sm-6 col-lg-4 g-mb-4">
+                    <article class="u-shadow-v21 u-shadow-v21--hover g-transition-0_3 mb-5">
+                        {% if post.image %}
+                        <img class="img-fluid" src="{{ post.image }}" alt="">
+                        {% endif %}
+                        <div class="g-bg-white g-pa-30 g-rounded-bottom-5">
+                            <ul class="list-inline g-font-size-12 g-color-gray-dark-v4 ">
+                                <li class="list-inline-item g-font-weight-600 g-color-blue mr-0">{{ post.author.username }}</li>
+                                <li class="list-inline-item mx-2">发表于</li>
+                                <li class="list-inline-item  ">{{ moment(post.timestamp).format('l') }}</li>
+                            </ul>
+                            <div class="">
+                                <a class="g-font-size-22 g-color-gray-dark-v2 g-color-primary--hover text-decoration-none g-transition-0_3 g-cursor-pointer "
+                                href="{{ url_for('blog.post', id=post.id) }}"><strong>{{ post.title }}</strong></a>
+                                <p class="g-color-gray-dark-v4">{{ post.summary }}</p>
+                                <ul class="list-inline">
+                                    {% if post.category.parent %}
+                                    <li class="list-inline-item">
+                                        <a class="g-color-cyan g-bg-cyan-opacity-0_1 g-bg-cyan--hover g-color-white--hover g-rounded-50 g-py-4 g-px-15 u-tags-v1"
+                                           href="{{ url_for('blog.category_posts', category_name=post.category.parent.name) }}">{{ post.category.parent.name }}</a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="list-inline-item">
+                                        <a class="g-color-lightred g-bg-lightred-opacity-0_1 g-bg-lightred--hover g-color-white--hover g-rounded-50 g-py-4 g-px-15 u-tags-v1"
+                                           href="{{ url_for('blog.category_posts', category_name=post.category.name) }}">
+                                            {{ post.category.name }}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            {% endfor %}
+        </div>
+    {{ pagination_widget(pagination, 'blog.category_posts', category_name=category.name) }}
+    </div>
+</div>
+{% endblock %}

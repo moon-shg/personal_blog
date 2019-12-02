@@ -1,7 +1,7 @@
 import os
 from app import create_app, db
-from app.models import User, Role, Permission
-from flask_migrate import Migrate
+from app.models import User, Role, Permission, Post, Category, Comment
+from flask_migrate import Migrate, upgrade
 
 
 app = create_app(os.environ.get('FLASK_CONFIG') or 'default')
@@ -10,7 +10,7 @@ migrate = Migrate(app, db)
 # 注册上下文处理器，为shell导入数据库相关信息
 @app.shell_context_processor
 def make_shell_context():
-    return dict(db=db, User=User, Role=Role, Permission=Permission)
+    return dict(db=db, User=User, Role=Role, Permission=Permission, Post=Post, Category=Category, Comment=Comment)
 
 # 在cli中添加启动单元测试的命令
 @app.cli.command()
@@ -19,3 +19,13 @@ def test():
     import unittest
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
+
+# 部署
+@app.cli.command()
+def deploy():
+    """Run deployment tasks"""
+    # 把数据库迁移到最新版本
+    upgrade()
+
+    # 创建或更新用户组
+    Role.insert_roles()

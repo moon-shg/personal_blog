@@ -1,0 +1,133 @@
+{% from "_macros.html" import comment_reply_widget, comment_edit_widget %}
+<div class="">
+    {% for comment in comments %}
+{#       comments #}
+        <div class="social-feed-box g-pa-10">
+{#         disable comment #}
+            {% if comment.disable and not current_user.can(Permission.MODERATE) %}
+             <p class="text-center g-font-weight-600">**该条评论已被封禁**</p>
+            {% else %}
+{#        avatar #}
+            <div class="social-avatar">
+                <a href="" class="float-left">
+                    <img alt="image" src="{{ comment.author.avatar }}">
+                </a>
+                <div class="media-body">
+                    <a class="g-color-black g-font-weight-600 text-decoration-none" href="#">
+                        {{ comment.author.username }}
+                        {% if comment.parent != None %}
+                            <span>&nbsp;<i class="fa fa-share g-color-primary"></i>&nbsp;{{ comment.parent.author.username }}</span>
+                        {% endif %}
+                    </a>
+                    <small class="text-muted">{{ moment(comment.timestamp).format("YYYY年MM月DD日 HH:MM") }}</small>
+                </div>
+            </div>
+{#        comment.body #}
+            <div class="social-body g-pb-0">
+{#            comment.parent #}
+                {% if comment.parent != None %}
+                    <div class="social-body g-py-0 g-px-0 g-bg-gray-light-v4 mb-2">
+                        <i class="fa fa-quote-left pull-left fa-border"></i>
+                        {% if comment.parent.body_html %}
+                            {{ comment.parent.body_html | safe }}
+                        {% else %}
+                            {{ comment.parent.body }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if comment.body_html %}
+                    {{ comment.body_html | safe }}
+                {% else %}
+                    {{ comment.body }}
+                {% endif %}
+                {% if comment.disable and current_user.can(Permission.MODERATE) and not moderate %}
+                    <p class="text-center g-font-weight-600 g-color-red border g-brd-red">**该条评论已被封禁**
+                        <a class="text-decoration-none" href="{{ url_for('blog.moderate', id=comment.post.id) }}">&emsp;点击管理评论</a></p>
+                {% endif %}
+            </div>
+{#        comment.footer #}
+            {% if not moderate and current_user.can(Permission.COMMENT) %}
+            <div>
+                <ul class="list-inline d-sm-flex justify-content-end my-0">
+{#              edit  #}
+                    {% if current_user == comment.author %}
+                    <li class="list-inline-item ">
+                        <a href="#comment_edit{{ comment.id | string }}" data-toggle="modal" class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" role="button">
+                            <i class="fa fa-edit g-pos-rel g-mx-10">&nbsp;编辑</i>
+                        </a>
+                    </li>
+                    {% endif %}
+{#              reply  #}
+                    <li class="list-inline-item">
+                        <a href="#comment{{ comment.id | string }}" data-toggle="modal" class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" role="button">
+                            <i class="fa fa-reply g-pos-rel g-mx-10">&nbsp;回复</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+{#        comment moderate#}
+            {% elif moderate and current_user.can(Permission.MODERATE) %}
+            <div>
+                <ul class="list-inline d-sm-flex my-0">
+                    <li class="list-inline-item ml-auto">
+                        {% if comment.disable %}
+                        <a href="{{ url_for('blog.moderate_enable', id=comment.id, page=page) }}" class="btn btn-success btn-sm" role="button">
+                            <i class="fa fa-reply g-pos-rel g-mx-10">&nbsp;&nbsp;解除</i>
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('blog.moderate_disable', id=comment.id, page=page) }}" class="btn btn-danger btn-sm" role="button">
+                            <i class="fa fa-eye-slash g-pos-rel g-mx-10">&nbsp;&nbsp;屏蔽</i>
+                        </a>
+                        {% endif %}
+                </ul>
+            </div>
+            {% endif %}
+        {% endif %}
+        </div>
+{#       reply editor #}
+        {% if not moderate %}
+        <div class="modal fade" id="comment{{ comment.id | string }}" tabindex="-1" data-backdrop="static" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel">回复评论</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                    <div class="modal-body">
+                        <div class="social-body g-pt-10 g-px-0 g-bg-gray-light-v4 mb-2">
+                            <i class="fa fa-quote-left fa-2x pull-left fa-border"></i>
+                            {% if comment.body_html %}
+                                {{ comment.body_html | safe }}
+                            {% else %}
+                                {{ comment.body }}
+                            {% endif %}
+                            <p class="d-flex justify-content-end mb-0 mr-4">--{{ comment.author.username }}</p>
+                        </div>
+                        {{ comment_reply_widget(comment, form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if not moderate and current_user == comment.author %}
+        <div class="modal fade" id="comment_edit{{ comment.id | string }}" tabindex="-1" data-backdrop="static" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="exampleModalLabel">编辑评论</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ comment_edit_widget(comment, form2) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+

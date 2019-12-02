@@ -45,3 +45,9 @@ tmp
 
 # Virtual environment
 venv
+
+# upload files
+app/static/img/upload
+
+# search index
+whoosh_index

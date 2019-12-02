@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Potato Cookbook - {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="g-py-20 g-py-40--sm g-bg-lightblue-radialgradient-circle">
+    <div class="container">
+        <div class="row">
+            {# left side #}
+            {% block user_page_left_side %}
+            <div class="col-md-3 g-mb-50">
+                <aside class="g-py-30 g-px-10 g-bg-white border g-brd-gray-light-v4 rounded">
+                    {# profile image #}
+                    <div>
+                        <div class="text-center mb-4 g-pos-rel">
+                            <img class="img-fluid g-height-120 g-width-120 rounded-circle border g-pa-3 g-mb-10" src="{{ user.avatar }}" alt="">
+                            <span class="d-block g-font-size-16 g-font-weight-600">{{ user.username }}</span>
+                            {% if current_user == user %}
+                            <a href="{{ url_for('user_page.upload_avatar') }}">
+                                <span class="u-icon-v3 u-icon-size--xs g-color-white--hover g-bg-primary--hover rounded-circle g-pos-abs g-top-0 g-right-15 g-cursor-pointer" data-toggle="tooltip"
+                                data-placement="top" title="修改头像"><i class="fa fa-pencil mt-2"></i></span>
+                            </a>
+                            {% endif %}
+                            <hr>
+                        </div>
+                    </div>
+                    {# profile list #}
+                    <div>
+                        {% block profile_list %}
+                        <ul class="list-unstyled">
+                            <li id="profile" class="d-flex align-items-center g-py-8 g-px-15 u-link-v5 g-color-text g-bg-gray-light-v5 g-rounded-7" style="transform: rotate(0);">
+                                <i class="fa fa-id-card-o g-font-size-22 u-line-icon-pro"></i>
+                                <a href="{{ url_for('user_page.user', username=user.username) }}"
+                                   class="text-decoration-none g-color-primary--active stretched-link">&nbsp; &nbsp;个人资料</a>
+                            </li>
+                            <li id="likes" class="d-flex align-items-center g-py-8 g-px-15 u-link-v5 g-color-text g-bg-gray-light-v5--hover g-rounded-7" style="transform: rotate(0);">
+                                <i class="fa fa-star-o g-font-size-22 u-line-icon-pro"></i>
+                                <a href="{{ url_for('user_page.my_likes') }}" class="g-ml-5 text-decoration-none g-color-gray-dark-v4 g-color-primary--hover stretched-link">&nbsp; &nbsp;我的收藏</a>
+                            </li>
+                            <li id="comments" class="d-flex align-items-center g-py-8 g-px-15 u-link-v5 g-color-text g-bg-gray-light-v5--hover g-rounded-7" style="transform: rotate(0);">
+                                <i class="fa fa-commenting-o g-font-size-22 u-line-icon-pro"></i>
+                                <a href="{{ url_for('user_page.my_comments') }}" class="g-ml-3 text-decoration-none g-color-gray-dark-v4 g-color-primary--hover stretched-link">&nbsp; &nbsp;我的评论</a>
+                            </li>
+                            <li id="replies" class="d-flex align-items-center g-py-8 g-px-15 u-link-v5 g-color-text g-bg-gray-light-v5--hover g-rounded-7" style="transform: rotate(0);">
+                                <i class="fa fa-comments-o g-font-size-22 u-line-icon-pro"></i>
+                                <a href="#" class="g-ml-3 text-decoration-none g-color-gray-dark-v4 g-color-primary--hover stretched-link">&nbsp; &nbsp;回复我的</a>
+                            </li>
+                        </ul>
+                        {% endblock %}
+                    </div>
+                </aside>
+            </div>
+            {% endblock %}
+            {# right side #}
+            {% block user_page_right_side %}
+            <div class="col-md-8 g-mb-50 ">
+                <div class="border g-bg-white g-brd-gray-light-v4 rounded" style="min-height: 440px">
+                    <section class="g-color-gray-dark-v4" id="user_profile" >
+                        <header class="text-center mt-4 mb-3"><h3>我的资料</h3></header>
+                        <hr class="mx-5">
+                        <div>
+                            <div class="row mx-5">
+                            <div class="col-sm-6"><p>用户名：{{ user.username }}</p></div>
+                            <div class="col-sm-6"><p>邮箱：{{ user.email }}</p></div>
+                        </div>
+                            <div class="row mx-5">
+                                <div class="col-sm-6"><p>真实姓名：{% if user.name %}  {{ user.name }}
+                                    {% else %} {% if not current_user.is_administrator() %} <a href="{{ url_for('user_page.edit_profile') }}" class="g-color-primary--hover"><span><i class="fa fa-pencil-square-o"></i>马上填写</span></a> {% endif %}{% endif %}</p></div>
+                                <div class="col-sm-6"><p>性别：{{ '男' if user.gender else '女' }}</p></div>
+                            </div>
+                            <div class="row mx-5">
+                                <div class="col-12"><p>地址：{% if user.location %} {{ user.location }}
+                                    {% else %} {% if not current_user.is_administrator() %}<a href="{{ url_for('user_page.edit_profile') }}" class="g-color-primary--hover"><span><i class="fa fa-pencil-square-o g-color-primary--hover"></i>马上填写</span></a>{% endif %} {% endif %}</p></div>
+                            </div>
+                            <div class="row mx-5">
+                                <div class="col-sm-6"><p>注册时间：{{ user.member_since }}</p></div>
+                                <div class="col-sm-6"><p>上次登录：{{ user.last_seen }}</p></div>
+                            </div>
+                            <div class="row mx-5 overflow-auto" style="max-height: 87px">
+                                <div class="col-12"><p>个人简介：{% if user.about_me %} {{ user.about_me }}
+                                    {% else %}你还没有填写个人简介诶 -_-||&nbsp;&nbsp; {% if not current_user.is_administrator() %}<a href="{{ url_for('user_page.edit_profile') }}" class="g-color-primary--hover"><span><i class="fa fa-pencil-square-o"></i>马上填写</span></a> {% endif %}{% endif %}</p></div>
+                            </div>
+                        </div>
+                        <footer class="d-flex justify-content-center mt-4 mb-5 ">
+                            {% if current_user.is_administrator() %}
+                            <a href="{{ url_for('user_page.edit_profile_admin', id=user.id) }}" class="btn btn-xl g-color-red g-color-white--hover u-btn-outline-red u-btn-hover-v2-2 g-rounded-50" role="button" >
+                                <span> &nbsp;编辑个人资料(管理员) <i class="fa fa-edit g-font-size-24 float-left"></i></span>
+                            </a>
+                            {% elif user == current_user %}
+                            <a href="{{ url_for('user_page.edit_profile') }}" class="btn btn-xl g-color-primary g-color-white--hover u-btn-outline-primary u-btn-hover-v2-2 g-rounded-50" role="button" >
+                                <span> &nbsp;编辑个人资料 <i class="fa fa-edit g-font-size-24 float-left"></i></span>
+                            </a>
+                            {% endif %}
+                        </footer>
+                    </section>
+                </div>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

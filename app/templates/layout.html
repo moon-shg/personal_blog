@@ -7,18 +7,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 
+    {#  CKEditor - Code Snippet  #}
+    {{ ckeditor.load_code_theme() }}
     <link rel="shortcut icon" href="{{ url_for('static', filename='potato_100px.png') }}">
-    {# font-awesome icons #}
-    <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome-4.7.0/css/font-awesome.css') }}">
     {% block styles %}
+    {# inspinia - style.css  #}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">#}
     <!-- Bootstrap CSS -->
     {{ bootstrap.load_css() }}
+    {# font-awesome icons #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/font-awesome-4.7.0/css/font-awesome.css') }}">
+
     {# core.css #}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/core.css') }}">
-    {# animate #}
+    {# animate.css #}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+    {# bootstrap-markdown.css #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap-markdown/css/bootstrap-markdown.min.css') }}">
+    {# social-share.css #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/social-share/css/share.min.css') }}">
+    {# github-markdown.css #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/github-markdown/css/github-markdown.css') }}">
     {# custom.css #}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    {# toastr.css #}
+    {{ toastr.include_jquery() }}
+    {{ toastr.include_toastr_css() }}
+    {{ toastr.message() }}
+    {# fancybox.css #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fancybox/css/jquery.fancybox.css') }}">
 
     {% endblock %}
 
@@ -26,28 +43,44 @@
     {% endblock %}
   </head>
   <body>
-    {#page-top#}
+    {# page-top #}
     {% block top %}{% endblock %}
     {% block navbar %}{% endblock %}
-    {#flash#}
+    {# flash #}
     {% block flash %}{% endblock %}
-    {#content#}
+    {# content #}
     {% block content %}
     {% endblock %}
 
-    {#footer#}
+    {# footer #}
     {% block footer %}{% endblock %}
+    {# gotoTop #}
+    {% block gototop %}{% endblock %}
 
     <!-- Optional JavaScript -->
     {{ bootstrap.load_js() }}
+    {# moment.js #}
+    {{ moment.include_moment() }}
+    {{ moment.locale('zh-cn') }}
+    {# bootstrap-markdown.js #}
+    <script src="{{ url_for('static', filename='plugins/bootstrap-markdown/js/bootstrap-markdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/bootstrap-markdown/js/bootstrap-markdown.zh.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/bootstrap-markdown/js/marked.js') }}"></script>
+    {# social-share.js #}
+    <script src="{{ url_for('static', filename='plugins/social-share/js/social-share.min.js') }}"></script>
+    {#  toastr.js  #}
+    {{ toastr.include_toastr_js() }}
+    {# fancybox.js #}
+    <script src="{{ url_for('static', filename='plugins/fancybox/js/jquery.fancybox.min.js') }}"></script>
+
     {#script#}
     {% block scripts %}
-     <script>
-        {#Bootstrap - toolstips#}
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-     </script>
-        {% endblock %}
+        <script>
+            {#Bootstrap - toolstips#}
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        </script>
+    {% endblock %}
   </body>
 </html>

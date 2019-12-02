@@ -1,0 +1,74 @@
+{% extends "user/user_page.html" %}
+{% from 'custom_macros.html' import render_field %}
+
+{% block title %}{{ user.username }} - 编辑资料{% endblock %}
+
+{% block user_page_right_side %}
+    <div class="col-md-8 g-mb-50 ">
+                <div class="border g-bg-white g-brd-gray-light-v4 rounded" style="min-height: 440px">
+                    <section class="g-color-gray-dark-v4">
+                        <header class="text-center mt-4 mb-3"><h3>编辑资料</h3></header>
+                        <hr class="mx-5">
+                        <form method="post">
+                            {{ form.hidden_tag()  }}
+                        {# 用户名 & 邮箱 #}
+                            {% if current_user.is_administrator() %}
+                                <div class="row mx-5">
+                                    <div class="col-sm-6 d-flex align-items-center mb-3"><p class="my-0">用户名：</p>{{ render_field(form.username) }}</div>
+                                    <div class="col-sm-6 d-flex align-items-center mb-3"><p class="my-0">邮箱：</p>{{  render_field(form.email) }}</div>
+                                </div>
+                            {% else %}
+                                <div class="row mx-5">
+                                    <div class="col-sm-6"><p>用户名：{{ user.username }}</p></div>
+                                    <div class="col-sm-6"><p>邮箱：{{ user.email }}</p></div>
+                                </div>
+                            {% endif %}
+                        {# 用户组 & 邮箱认证 #}
+                            {% if current_user.is_administrator() %}
+                                <div class="row mx-5">
+                                    <div class="col-sm-6 d-flex align-items-center mb-3"><p class="my-0">用户组：</p>{{ form.role(class='form-control form-control-sm g-font-size-13 g-max-width-60x') }}</div>
+                                    <div class="col-sm-6 d-flex align-items-center mb-3">
+                                        <p class="my-0">邮箱已认证：</p>
+                                            <label class="form-check-inline u-check g-color-gray-dark-v5 g-font-size-13 mb-0 g-pl-25">
+                                                {{ form.confirmed(type="checkbox", id="gender1", class='form-check custom-control-input',value="True") }}
+                                                <span class="d-block u-check-icon-checkbox-v6 g-absolute-centered--y g-left-0">
+                                                    <i class="fa" data-check-icon="&#xF00C;"></i>
+                                                </span>
+                                            </label>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {# 姓名 & 性别 #}
+                            <div class="row mx-5">
+                                <div class="col-sm-6 d-flex align-items-center mb-3"><p class="my-0">真实姓名：</p>{{ form.name(class='form-control form-control-sm g-font-size-13 g-max-width-60x') }}</div>
+                                <div class="col-sm-6 d-flex align-items-center mb-3">
+                                    <p class="my-0">性别：</p>
+                                    {{ form.gender(class='form-control form-control-sm g-font-size-13 g-max-width-60x') }}
+                                </div>
+                            </div>
+                        {# 地址 #}
+                            <div class="row mx-5 mb-1">
+                                <div class="col-12 col-lg-7 d-flex align-items-center mb-3"><p class="my-0">地址：</p>{{ form.location(class='form-control form-control-sm g-font-size-13 g-max-width-60x') }}</div>
+                            </div>
+                        {# 注册时间 & 上次登录 #}
+                            <div class="row mx-5">
+                                <div class="col-sm-6"><p>注册时间：{{ user.member_since }}</p></div>
+                                <div class="col-sm-6"><p>上次登录：{{ user.last_seen }}</p></div>
+                            </div>
+                        {# 个人简介 #}
+                            <div class="row mx-5 overflow-auto">
+                                <div class="col-12 mb-3"><p class=" my-0">个人简介：</p>{{ form.about_me(class='form-control') }}</div>
+                            </div>
+                        {# 保存按钮 #}
+                            <footer class="d-flex justify-content-center mt-2 mb-3">
+                                {% if current_user.is_administrator() %}
+                                    {{ form.submit(value="保存(管理员)", class="btn btn-lg g-width-50x g-width-30x--md g-color-red g-color-white--hover u-btn-outline-red g-rounded-50") }}
+                                {% else %}
+                                    {{ form.submit(value="保存", class="btn btn-lg g-width-30x g-color-primary g-color-white--hover u-btn-outline-primary g-rounded-50") }}
+                                {% endif %}
+                            </footer>
+                        </form>
+                    </section>
+                </div>
+            </div>
+{% endblock user_page_right_side %}

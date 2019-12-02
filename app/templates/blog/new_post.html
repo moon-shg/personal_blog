@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Potato Cookbook - 发表博客 {% endblock %}
+
+
+{% block page_content %}
+<div class="col-12">
+    <div class="u-heading-v3-1 g-mb-30">
+    <h4 class="u-heading-v3__title g-color-primary g-brd-primary">编辑文章</h4>
+    </div>
+    <div class="mb-5">
+    {% if current_user.can(Permission.WRITE) %}
+        <form method="post" enctype=multipart/form-data>
+            {{ form.hidden_tag() }}
+    {#            post image #}
+            <div class="form-row mb-2">
+                 <p class="g-font-size-16 g-font-weight-600 g-px-5 g-mb-7">文章头图</p>
+                <div class="col-12 mb-2">
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type=file class="custom-file-input" id="upload" name=image >
+                            <label class="custom-file-label" for="upload" data-browse="浏览文件">选择文件</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {#            post title & category #}
+            <div class="form-row mb-2">
+                <div class="col-md-6 mb-2">
+                    {{ form.title.label(class="g-font-size-16 g-font-weight-600 ") }}
+                    {{ form.title(class="form-control", placeholder="标题") }}
+                </div>
+                <div class="col-md-3 mb-2">
+                    {{ form.category.label(class="g-font-size-16 g-font-weight-600") }}
+                    {{ form.category(class="form-control", placeholder="文章分类", onchange="Select('category', '#sub_category', category_url)") }}
+                </div>
+                <div class="col-md-3 mb-2">
+                    {{ form.sub_category.label(class="g-font-size-16 g-font-weight-600") }}
+                    {{ form.sub_category(class="form-control", placeholder="二级分类") }}
+                </div>
+            </div>
+    {#            post summary #}
+            <div class="form-row mb-2">
+                <div class="col-12 mb-2">
+                    {{ form.summary.label(class="g-font-size-16 g-font-weight-600 ") }}
+                    {{ form.summary(class="form-control", placeholder="概述") }}
+                </div>
+            </div>
+    {#            post body #}
+            <div class="mb-4">{{ form.body() }}</div>
+            <div class="text-center" >{{ form.submit(class="btn btn-lg u-btn-primary") }}</div>
+        {#        initialize ckeditor #}
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='body') }}
+        </form>
+    {% endif %}
+    </div>
+</div>
+{% endblock page_content %}
+
+
+{% block scripts %}
+{{ super() }}
+    {% block category_url %}
+    <script>
+        let category_url = "{{ url_for('blog.new_post') }}";
+        {#let csrf = "{{ csrf_token() }}";#}
+    </script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}" charset="UTF-8"></script>
+{#    文件表单选择文件后更改名字 #}
+    <script>
+        $('.custom-file-input').on('change', function() {
+            let fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+    </script>
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "_macros.html" import pagination_widget %}
+
+{% block title %}Potato Cookbook - 管理评论{% endblock %}
+
+{% block articles %}
+    <div class="card-body g-pt-10 px-0">
+        <h1 class="text-dark g-font-weight-600 "><strange>评论管理</strange>&emsp;--&emsp;<<{{ post.title }}>>
+            <a href="{{ url_for('blog.post', id=post.id) }}" class="btn d-inline-block mt-3 btn-success pull-right">返回文章</a>
+        </h1>
+        <hr>
+    </div>
+    {% set moderate=True %}
+    {% include "_comment.html" %}
+    <div>
+    {{ pagination_widget(pagination, 'blog.moderate', id=post.id) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,57 @@
+<div class="">
+    {% for post in posts %}
+    <div class="card g-mb-100 border-0">
+{#    header-image  #}
+        {% if post.image %}
+        <a href="{{ post.image }}" data-fancybox>
+            <img src="{{ post.image }}" class="img-fluid w-100 g-rounded-6 card-img-top" alt="">
+        </a>
+        {% endif %}
+{#    author avatar #}
+        <div class="media pt-3 g-pl-12">
+            <img class="img-fluid g-width-45 g-height-45 g-brd-around--dashed g-brd-gray-light-v1 rounded-circle" src="{{ post.author.avatar }}" alt="">
+            <div class="media-body ml-2 g-mt-2 g-font-size-12">
+                <p class="mb-0 g-font-weight-600 g-font-size-default">{{ post.author.username }}</p>
+                {{ moment(post.timestamp).fromNow(refresh=True) }}
+            </div>
+            {% if current_user == post.author or current_user.can(Permission.ADMIN) %}
+                <a class="btn btn-xs u-btn-deeporange align-self-center px-3" href="{{ url_for('blog.edit', id=post.id) }}">编辑文章</a>
+            {% endif %}
+        </div>
+{#    title & summary #}
+        <div class="card-body g-pt-10 ">
+            <a href="{{ url_for('blog.post', id=post.id) }}" class="text-decoration-none">
+                <h2 class="text-dark g-font-weight-600 g-color-primary--hover">{{ post.title }}</h2>
+            </a>
+            <p class="card-text">{{ post.summary }}</p>
+        </div>
+{#    category & views #}
+        <div class="card-footer g-color-primary d-inline-flex justify-content-between g-bg-white">
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item">
+                    <span><i class="fa fa-map-signs"></i>
+                    <a href="{{ url_for('blog.category_posts', category_name=post.category.parent.name) }}" class="g-color-red--hover text-decoration-none" data-toggle="tooltip" data-placement="top" title="分类"> &nbsp;{{ post.category.parent.name }}</a>
+                    <a href="{{ url_for('blog.category_posts', category_name=post.category.name) }}" class="g-color-red--hover text-decoration-none" data-toggle="tooltip" data-placement="top" title="分类"> &nbsp;{{ post.category.name }}</a>
+                    </span>
+                </li>
+            </ul>
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item"><span><i class="fa fa-comment-o"></i>
+                    <a href="#" class="g-color-red--hover text-decoration-none" data-toggle="tooltip" data-placement="top" title="评论数"> &nbsp;{{ post.comments.count() }}</a>
+                    </span>
+                </li>
+                <li class="list-inline-item"><span><i class="fa fa-eye"></i>
+                    <a href="#" class="g-color-red--hover text-decoration-none" data-toggle="tooltip" data-placement="top" title="阅读数"> &nbsp;{{ post.views }}</a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+{#    social-share #}
+        <div class="u-heading-v1-5 pb-2 g-brd-gray-light-v2 text-center">
+            <h2 class="u-heading-v1__title g-bg-white pl-15">
+                <div class="social-share"  data-disabled="google,facebook,qzone,linkedin,diandian,tencent"></div>
+            </h2>
+        </div>
+    </div>
+    {% endfor %}
+</div>

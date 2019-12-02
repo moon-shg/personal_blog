@@ -1,0 +1,18 @@
+{% extends "blog/new_post.html" %}
+
+{% block title %}Potato Cookbook - {{ post.title }} {% endblock %}
+
+{% block category_url %}
+    <script>
+        let category_url = "{{ url_for('blog.edit', id=post.id) }}";
+        {#let csrf = "{{ csrf_token() }}";#}
+    </script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}" charset="UTF-8"></script>
+{#    文件表单选择文件后更改名字 #}
+    <script>
+        $('.custom-file-input').on('change', function() {
+            let fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+    </script>
+{% endblock %}
