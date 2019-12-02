@@ -56,6 +56,29 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or \
                               "mysql+mysqlconnector://st:123456@localhost:3306/blog_production?charset=utf8"
 
+    # 应用出错时发送电子邮件
+    @classmethod
+    def init_app(cls, app):
+        Config.init_app(app)
+
+        # 出错时邮件通知管理员
+        import logging
+        from logging.handlers import SMTPHandler
+        credentials = None
+        secure = None
+        if getattr(cls, 'MAIL_USERNAME', None) is not None:
+            credentials = (cls.MAIL_USERNAME, cls.MAIL_PASSWORD)
+            if getattr(cls, 'MAIL_USE_TLS', None):
+                secure = ()
+        mail_handler = SMTPHandler(
+            mailhost=(cls.MAIL_SERVER, cls.MAIL_PORT),
+            fromaddr=cls.MAIL_SENDER,
+            toaddrs=[cls.MAIL_SENDER],
+            subject='Potato Web Application Error',
+            credentials=credentials,
+            secure=secure)
+        mail_handler.setLevel(logging.ERROR)
+        app.logger.addHandler(mail_handler)
 
 config = {
     'development': DevelopmentConfig,
