@@ -2,10 +2,12 @@ import os
 from app import create_app, db
 from app.models import User, Role, Permission, Post, Category, Comment
 from flask_migrate import Migrate, upgrade
+from flask_script import Manager
 
 
 app = create_app(os.environ.get('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
+manager = Manager(app)
 
 # 注册上下文处理器，为shell导入数据库相关信息
 @app.shell_context_processor
@@ -29,3 +31,10 @@ def deploy():
 
     # 创建或更新用户组
     Role.insert_roles()
+
+
+@manager.command
+def hello():
+    """只是一个测试命令"""
+    print('Hello')
+    return "Hello World!"
