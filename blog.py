@@ -1,7 +1,7 @@
 import os
 from app import create_app, db
 from app.models import User, Role, Permission, Post, Category, Comment
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 
 
 app = create_app(os.environ.get('FLASK_CONFIG') or 'default')
@@ -19,3 +19,13 @@ def test():
     import unittest
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
+
+# 部署
+@app.cli.command()
+def deploy():
+    """Run deployment tasks"""
+    # 把数据库迁移到最新版本
+    upgrade()
+
+    # 创建或更新用户组
+    Role.insert_roles()
