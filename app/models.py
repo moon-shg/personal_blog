@@ -225,9 +225,9 @@ class User(db.Model, UserMixin):
             'member_since': self.member_since,
             'last_seen': self.last_seen,
             'about_me': self.about_me,
-            'avatar': url_for('api.get_user_avatar', id=self.id),
-            'posts_url': url_for('api.get_posts', id=self.id),
-            'liked_posts_url': url_for('api.get_user_liked_posts', id=self.id),
+            'avatar': self.avatar,
+            'posts_url': url_for('api.get_user_posts', id=self.id),
+            'likes_url': url_for('api.get_user_likes', id=self.id),
             'posts_count': self.posts.count()
         }
         return json_user
@@ -314,10 +314,10 @@ class Post(db.Model):
             'timestamp': self.timestamp,
             'views': self.views,
             'author_url': url_for('api.get_user', id=self.author_id),
-            'category_url': url_for('api.get_category', id=self.category_id),
+            'category_url': url_for('api.get_category_posts', name=self.category.name),
             'comments_url': url_for('api.get_post_comments', id=self.id),
             'comment_count': self.comments.count(),
-            'img_url': url_for('api.get_post_image', id=self.id)
+            'img_url': self.image
         }
         return json_post
 
@@ -338,7 +338,6 @@ class Post(db.Model):
         else:
             category_id = Category.query.filter_by(name=json_post.get('category')).first().id
         return Post(title=title, summary=summary, body=body, category_id=category_id)
-
 
     def __repr__(self):
         return f'<文章：{self.title}>'
@@ -379,7 +378,7 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.UnicodeText)
     body_html = db.Column(db.UnicodeText)
-    disable = db.Column(db.Boolean)
+    disable = db.Column(db.Boolean, default=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
@@ -387,6 +386,27 @@ class Comment(db.Model):
     parent_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
     replies = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]),
                               lazy='dynamic')  # 这里使用 remote_side 表示多对一的关系
+
+    # 将评论转换成 JSON 格式 供 API 使用
+    def to_json(self):
+        json_comment = {
+            'url': url_for('api.get_comment', id=self.id),
+            'body': self.body,
+            'disable': self.disable,
+            'body_html': self.body_html,
+            'timestamp': self.timestamp,
+            'author_url': url_for('api.get_user', id=self.author_id),
+            'post_url': url_for('api.get_post', id=self.post_id),
+        }
+        return json_comment
+
+    # 从 JSON 格式数据创建评论
+    @staticmethod
+    def from_json(json_comment):
+        body = json_comment.get('body')
+        if body is None or body == '':
+            raise ValidationError('comment does not have a title')
+        return Comment(body=body)
 
     # 在服务器端将comment.body中的markdown文本转换成html格式
     @staticmethod
