@@ -11,18 +11,6 @@ import os
 from sqlalchemy import extract
 import flask_whooshalchemyplus
 
-
-# 处理文章头图
-def save_post_img():
-    if request.method == 'POST' and 'image' in request.files:
-        try:
-            filename = post_img.save(request.files['image'])
-        except UploadNotAllowed:
-            pass
-        else:
-            post.image = url_for("static", filename='img/upload/post_img/' + filename)
-
-
 # 博客地址
 @blog.route('/post/<int:id>', methods=['GET', 'POST'])
 def post(id):
@@ -83,7 +71,13 @@ def new_post():
     post = Post()
     form = PostForm()
     # 处理文章头图
-    save_post_img()
+    if request.method == 'POST' and 'image' in request.files:
+        try:
+            filename = post_img.save(request.files['image'])
+        except UploadNotAllowed:
+            pass
+        else:
+            post.image = url_for("static", filename='img/upload/post_img/' + filename)
     # 处理二级表单
     if request.method == 'POST' and not form.submit.data:
         data = request.get_json()
@@ -123,7 +117,13 @@ def edit(id):
         abort(403)
     form = PostEditForm()
     # 处理文章头图
-    save_post_img()
+    if request.method == 'POST' and 'image' in request.files:
+        try:
+            filename = post_img.save(request.files['image'])
+        except UploadNotAllowed:
+            pass
+        else:
+            post.image = url_for("static", filename='img/upload/post_img/' + filename)
     # 处理二级表单
     if request.method == 'POST' and not form.submit.data:
         data = request.get_json()
@@ -134,8 +134,13 @@ def edit(id):
         return jsonify(sub_categories)
     if form.validate_on_submit():
         post.title = form.title.data
-        if form.sub_category.data:
+        # 如果没有输入一级分类，就设置成默认分类（未分类）
+        if not form.category.data:
+            post.category = Category.query.filter_by(default=True).first()
+        # 如果输入了一级分类和二级分类，就设置成二级分类
+        elif form.sub_category.data:
             post.category = Category.query.get(form.sub_category.data)
+        # 如果只输入了一级分类， 就设置成一级分类
         else:
             post.category = Category.query.get(form.category.data)
         post.summary = form.summary.data
