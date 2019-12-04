@@ -12,17 +12,6 @@ from sqlalchemy import extract
 import flask_whooshalchemyplus
 
 
-# 处理文章头图
-def save_post_img():
-    if request.method == 'POST' and 'image' in request.files:
-        try:
-            filename = post_img.save(request.files['image'])
-        except UploadNotAllowed:
-            pass
-        else:
-            post.image = url_for("static", filename='img/upload/post_img/' + filename)
-
-
 # 博客地址
 @blog.route('/post/<int:id>', methods=['GET', 'POST'])
 def post(id):
@@ -83,7 +72,13 @@ def new_post():
     post = Post()
     form = PostForm()
     # 处理文章头图
-    save_post_img()
+    if request.method == 'POST' and 'image' in request.files:
+        try:
+            filename = post_img.save(request.files['image'])
+        except UploadNotAllowed:
+            pass
+        else:
+            post.image = url_for("static", filename='img/upload/post_img/' + filename)
     # 处理二级表单
     if request.method == 'POST' and not form.submit.data:
         data = request.get_json()
@@ -123,7 +118,13 @@ def edit(id):
         abort(403)
     form = PostEditForm()
     # 处理文章头图
-    save_post_img()
+    if request.method == 'POST' and 'image' in request.files:
+        try:
+            filename = post_img.save(request.files['image'])
+        except UploadNotAllowed:
+            pass
+        else:
+            post.image = url_for("static", filename='img/upload/post_img/' + filename)
     # 处理二级表单
     if request.method == 'POST' and not form.submit.data:
         data = request.get_json()

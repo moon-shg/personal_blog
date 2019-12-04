@@ -51,3 +51,9 @@ app/static/img/upload
 
 # search index
 whoosh_index
+
+# uwsgi configfile
+config.ini
+
+# version link
+www
