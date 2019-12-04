@@ -19,7 +19,7 @@ class Config:
     POSTS_PER_PAGE = int(os.environ.get('POSTS_PER_PAGE', '10'))
     # flask-uploads 配置
     # 用户头像文件
-    UPLOADED_AVATAR_DEST = os.path.join(basedir, 'app/static/img/upload')
+    UPLOADED_AVATAR_DEST = os.path.join(basedir, 'app/static/img/upload/avatar')
     UPLOADED_AVATAR_ALLOW = IMAGES
     # 文章头图
     UPLOADED_POSTIMG_DEST = os.path.join(basedir, 'app/static/img/upload/post_img')

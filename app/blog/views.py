@@ -10,7 +10,7 @@ from flask_ckeditor import upload_success, upload_fail
 import os
 from sqlalchemy import extract
 import flask_whooshalchemyplus
-
+from config import basedir
 
 # 博客地址
 @blog.route('/post/<int:id>', methods=['GET', 'POST'])
@@ -124,6 +124,10 @@ def edit(id):
         except UploadNotAllowed:
             pass
         else:
+            # 如果用户已经有头像了，就删除原先头像文件
+            post_img_path = os.path.join(basedir, 'app', post.image[1:])  # user.avatar 第一个字符‘/’会使得join 不能正确拼接路径，需要去掉
+            if os.path.exists(post_img_path):
+                os.remove(post_img_path)
             post.image = url_for("static", filename='img/upload/post_img/' + filename)
     # 处理二级表单
     if request.method == 'POST' and not form.submit.data:
@@ -135,8 +139,13 @@ def edit(id):
         return jsonify(sub_categories)
     if form.validate_on_submit():
         post.title = form.title.data
-        if form.sub_category.data:
+        # 如果没有输入一级分类，就设置成默认分类（未分类）
+        if not form.category.data:
+            post.category = Category.query.filter_by(default=True).first()
+        # 如果输入了一级分类和二级分类，就设置成二级分类
+        elif form.sub_category.data:
             post.category = Category.query.get(form.sub_category.data)
+        # 如果只输入了一级分类， 就设置成一级分类
         else:
             post.category = Category.query.get(form.category.data)
         post.summary = form.summary.data
