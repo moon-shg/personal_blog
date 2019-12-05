@@ -211,6 +211,11 @@ def archive_year(year):
     return render_template('blog/archives_year.html', posts=posts, page=page, pagination=pagination, year=year)
 
 
+# 博客About页面
+@blog.route('/about')
+def about():
+    return render_template('blog/about.html')
+
 # 管理评论
 @blog.route('/moderate/<int:id>')
 @login_required
