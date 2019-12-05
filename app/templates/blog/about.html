@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Potato Cookbook - About{% endblock %}
+
+{% block articles %}
+<div class="g-my-30">
+    <div class="u-heading-v3-1 g-mb-30">
+        {# head #}
+        <h4 class="u-heading-v3__title g-color-primary g-brd-primary"><span class="g-color-black">Blog</span> Introduce</h4>
+    </div>
+    {# content #}
+    <div>
+        <ul class="list-unstyled">
+            <li class="g-mb-15">
+                <h4 class="h6 d-flex align-items-baseline">
+                    <i class="fa fa-angle-double-right g-mr-10 g-color-gray-dark-v5"></i>
+                    <span>后端使用 Flask 框架，采用 Jinja2 模板引擎渲染前端模板。并实现 RESTful API， 提供文章发表、修改、评论等多个接口。</span>
+                </h4>
+            </li>
+            <li class="g-mb-15">
+                <h4 class="h6 d-flex align-items-baseline">
+                    <i class="fa fa-angle-double-right g-mr-10 g-color-gray-dark-v5"></i>
+                    <span>前端 Web 模板基于 Bootstrap 4 搭建， 实现响应式布局。同时使用 HTML5/CSS3/jQuery 等技术。</span>
+                </h4>
+            </li>
+            <li class="g-mb-15">
+                <h4 class="h6 d-flex align-items-baseline">
+                    <i class="fa fa-angle-double-right g-mr-10 g-color-gray-dark-v5"></i>
+                    <span>数据库采用 MySQL8.0，使用 SQLAlchemy ORM框架(通过 Flask-SQLAlchemy 插件集成)。</span>
+                </h4>
+            </li>
+            <li class="g-mb-15">
+                <h4 class="h6 d-flex align-items-baseline">
+                    <i class="fa fa-angle-double-right g-mr-10 g-color-gray-dark-v5"></i>
+                    <span>项目基于 CentOS7 + uWSGI + Nginx 部署于云服务器上。</span>
+                </h4>
+            </li>
+            <li class="g-mb-15">
+                <h4 class="h6 d-flex align-items-baseline">
+                    <i class="fa fa-angle-double-right g-mr-10 g-color-gray-dark-v5"></i>
+                    <span>发布文章支持 CKEdiotr 和 Markdown 两种富文本编辑器。发布内容可在客户端或服务器端实现 Markdown 到 HTML 转换。（通过 Bootstrap-Markdown, Flask_CKEditor 插件以及 markdown, bleach 模块集成）</span>
+                </h4>
+            </li>
+            <li class="g-mb-15">
+                <h4 class="h6 d-flex align-items-baseline">
+                    <i class="fa fa-angle-double-right g-mr-10 g-color-gray-dark-v5"></i>
+                    <span>使用 Whoosh 和 Jieba 实现中文全文检索(通过 Flask-WhooshAlchemyPlus 插件和 Jieba 中文分词库集成) </span>
+                </h4>
+            </li>
+            <li class="g-mb-15">
+                <h4 class="h6 d-flex align-items-baseline">
+                    <i class="fa fa-angle-double-right g-mr-10 g-color-gray-dark-v5"></i>
+                    <span>支持本地邮箱注册账户。域名备案后计划通过 OAuth2 实现第三方登录。 </span>
+                </h4>
+            </li>
+            <li class="g-mb-15">
+                <h4 class="h6 d-flex align-items-baseline">
+                    <i class="fa fa-angle-double-right g-mr-10 g-color-gray-dark-v5"></i>
+                    <span>用户登录后，支持个人资料编辑，头像上传和更换。同时支持发表文章评论，回复评论，编辑评论以及收藏文章。管理员权限用户可封禁不良评论。 </span>
+                </h4>
+            </li>
+            <li class="g-mb-15">
+                <h4 class="h6 d-flex align-items-baseline">
+                    <i class="fa fa-angle-double-right g-mr-10 g-color-gray-dark-v5"></i>
+                    <span>发表的文章支持多级分类。并且支持日期归档，热门文章，随机文章。</span>
+                </h4>
+            </li>
+            <li class="g-mb-15">
+                <h4 class="h6 d-flex align-items-baseline">
+                    <i class="fa fa-angle-double-right g-mr-10 g-color-gray-dark-v5"></i>
+                    <span>支持社交平台分享，如分享到微信、QQ、微博等平台。</span>
+                </h4>
+            </li>
+        </ul>
+    </div>
+    <div class="d-flex justify-content-center">
+        <ul class="list-inline  mt-3">
+                    <li class="list-inline-item mr-2"><span class="u-icon-v1 u-icon-size--sm u-icon-slide-up--hover g-color-cyan g-bg-cyan-opacity-0_1 rounded-circle"  data-toggle="tooltip" data-placement="top" title="yueshangst@yahoo.com">
+                        <i class="g-font-size-default u-icon__elem-regular fa fa-envelope"></i>
+                        <i class="g-font-size-default u-icon__elem-hover fa fa-envelope"></i>
+                    </span></li>
+                    <li class="list-inline-item mr-2"><span class="u-icon-v1 u-icon-size--sm g-color-green g-bg-green-opacity-0_1 rounded-circle u-icon-slide-up--hover" data-toggle="tooltip" data-placement="top" title="moon-louduan">
+                        <i class="g-font-size-default u-icon__elem-regular fa fa-weixin"></i>
+                        <i class="g-font-size-default u-icon__elem-hover fa fa-weixin"></i>
+                    </span></li>
+                    <li class="list-inline-item mr-2"><span class="u-icon-v1 u-icon-size--sm g-color-blue g-bg-blue-opacity-0_1 rounded-circle u-icon-slide-up--hover" data-toggle="tooltip" data-placement="top" title="393773661">
+                        <i class="g-font-size-default u-icon__elem-regular fa fa-qq"></i>
+                        <i class="g-font-size-default u-icon__elem-hover fa fa-qq"></i>
+                    </span></li>
+                    <li class="list-inline-item mr-2"><a href="https://github.com/moon-shg" class="u-icon-v1 u-icon-size--sm g-color-bluegray g-bg-bluegray-opacity-0_1 rounded-circle u-icon-slide-up--hover" data-toggle="tooltip" data-placement="top" title="moon-louduan">
+                        <i class="g-font-size-default u-icon__elem-regular fa fa-github"></i>
+                        <i class="g-font-size-default u-icon__elem-hover fa fa-github"></i>
+                    </a></li>
+                </ul>
+    </div>
+</div>
+{% endblock articles %}
