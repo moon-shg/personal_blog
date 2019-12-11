@@ -85,7 +85,7 @@ def upload_avatar():
         else:
             # 如果用户已经有头像了，就删除原先头像文件
             avatar_path = os.path.join(basedir, 'app', user.avatar[1:])  # user.avatar 第一个字符‘/’会使得join 不能正确拼接路径，需要去掉
-            if os.path.exists(avatar_path):
+            if os.path.exists(avatar_path) and user.avatar != '/static/img/avatar/akkarin.jpg':
                 os.remove(avatar_path)
             user.avatar = url_for('static', filename='img/upload/avatar/'+filename)
             db.session.add(user)

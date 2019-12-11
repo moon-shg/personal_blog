@@ -124,10 +124,11 @@ def edit(id):
         except UploadNotAllowed:
             pass
         else:
-            # 如果用户已经有头像了，就删除原先头像文件
-            post_img_path = os.path.join(basedir, 'app', post.image[1:])  # user.avatar 第一个字符‘/’会使得join 不能正确拼接路径，需要去掉
-            if os.path.exists(post_img_path):
-                os.remove(post_img_path)
+            # 如果文章已经有头图了，就删除原先头图文件
+            if post.image is not None:
+                post_img_path = os.path.join(basedir, 'app', post.image[1:])  # 第一个字符‘/’会使得join 不能正确拼接路径，需要去掉
+                if os.path.exists(post_img_path):
+                    os.remove(post_img_path)
             post.image = url_for("static", filename='img/upload/post_img/' + filename)
     # 处理二级表单
     if request.method == 'POST' and not form.submit.data:
