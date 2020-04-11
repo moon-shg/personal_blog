@@ -5,6 +5,7 @@ from ..models import User
 from .. import db
 from flask_login import login_user, login_required, logout_user, current_user
 from ..email import send_email
+from datetime import timedelta
 
 
 # 登录
@@ -14,7 +15,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
-            login_user(user, form.remember_me.data)
+            login_user(user, form.remember_me.data, duration=timedelta(days=1))
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
                 next = url_for('main.index')

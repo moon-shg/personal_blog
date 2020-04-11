@@ -285,10 +285,10 @@ class Post(db.Model):
     def on_changed_body(target, value, oldvalue, initiator):
         # 设置bleach.clean 允许的标签
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em',
-                        'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p', 'img']
+                        'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p', 'img', 's']
         # 设置bleach.clean 允许的属性
         allowed_attr = {
-            'a': ['href', 'title'],
+            'a': ['href', 'title', 'name'],
             'abbr': ['title'],
             'acronym': ['title'],
             'img': ['src', 'alt', 'title', 'width', 'height']
