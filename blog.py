@@ -42,7 +42,10 @@ def hello():
 def deploy():
     """Run deployment tasks"""
     # 把数据库迁移到最新版本
-    upgrade()
+    db.create_all()
 
     # 创建或更新用户组
     Role.insert_roles()
+
+    # 创建或更新分类
+    Category.insert_category()

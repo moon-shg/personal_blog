@@ -8,7 +8,7 @@ from flask_moment import Moment
 from flask_uploads import UploadSet, configure_uploads, patch_request_class
 from flask_ckeditor import CKEditor
 from flask_toastr import Toastr
-import flask_whooshalchemyplus
+# import flask_whooshalchemyplus
 
 
 bootstrap = Bootstrap()
@@ -39,7 +39,7 @@ def create_app(config_name):
     patch_request_class(app, 3*1024*1024)  # 设置上传文件最大为2mb
     ckeditor.init_app(app)
     toastr.init_app(app)
-    flask_whooshalchemyplus.init_app(app)
+    # flask_whooshalchemyplus.init_app(app)
 
 
     # 注册蓝本

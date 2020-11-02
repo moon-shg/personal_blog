@@ -3,7 +3,7 @@ from app.models import Post, Permission, Category, Comment
 from flask import jsonify, request, g, url_for, current_app
 from .decorators import permission_required
 from app import db
-from flask_whooshalchemyplus import index_one_model
+# from flask_whooshalchemyplus import index_one_model
 from .errors import forbidden
 
 
@@ -42,7 +42,7 @@ def new_post():
     post.author = g.current_user
     db.session.add(post)
     db.session.commit()
-    index_one_model(Post)
+    # index_one_model(Post)
     return jsonify(post.to_json()), 201, {'Location': url_for('api.get_post', id=post.id)}
 
 
@@ -65,7 +65,7 @@ def edit_post(id):
     post.category_id = category_id
     db.session.add(post)
     db.session.commit()
-    index_one_model(Post)
+    # index_one_model(Post)
     return jsonify(post.to_json())
 
 

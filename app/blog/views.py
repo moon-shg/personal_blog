@@ -9,7 +9,7 @@ from flask_uploads import UploadNotAllowed
 from flask_ckeditor import upload_success, upload_fail
 import os
 from sqlalchemy import extract
-import flask_whooshalchemyplus
+# import flask_whooshalchemyplus
 from config import basedir
 
 # 博客地址
@@ -103,7 +103,7 @@ def new_post():
         post.body = form.body.data
         db.session.add(post)
         db.session.commit()
-        flask_whooshalchemyplus.index_one_model(Post)  # 提交文章后 创建搜索索引
+        # flask_whooshalchemyplus.index_one_model(Post)  # 提交文章后 创建搜索索引
         flash('博客发表')
         return redirect(url_for('.post', id=post.id))
     return render_template("blog/new_post.html", form=form)
@@ -152,7 +152,7 @@ def edit(id):
         post.body = form.body.data
         db.session.add(post)
         db.session.commit()
-        flask_whooshalchemyplus.index_one_model(Post)  # 修改文章后 创建搜索索引
+        # flask_whooshalchemyplus.index_one_model(Post)  # 修改文章后 创建搜索索引
         flash('博客已修改成功')
         return redirect(url_for('.post', id=post.id))
     form.title.data = post.title

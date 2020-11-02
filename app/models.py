@@ -368,6 +368,32 @@ class Category(db.Model):
             db.session.add(category)
             db.session.commit()
 
+    @staticmethod
+    def insert_category():
+        categories = {
+            '未分类': None,
+            'Python': None,
+            'Linux': None,
+            '前端': None,
+            '数据库': None,
+            'Flask': 'Python',
+            'Mysql': '数据库',
+            'Redis': '数据库',
+            'Checkio': 'Python',
+            '数据结构与算法': 'Python',
+        }
+        default_category = '未分类'
+        for category_name, parent_name in categories.items():
+            category = Category.query.filter_by(name=category_name).first()
+            if category is None:
+                parent = Category.query.filter_by(name=parent_name).first()
+                parent_id = parent.id if parent else None
+                category = Category(name=category_name, parent_id=parent_id)
+            category.default = (category.name == default_category)
+            db.session.add(category)
+            db.session.flush()
+        db.session.commit()
+
     def __repr__(self):
         return f'<文章分类： {self.name}>'
 
