@@ -49,12 +49,12 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or \
-                              "mysql+mysqlconnector://root:St:19921014@localhost:3306/blog_test?charset=utf8mb4"
+                              "mysql+mysqlconnector://root:123456@localhost:3306/blog_test?charset=utf8mb4"
 
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or \
-                              "mysql+mysqlconnector://root:St:19921014@localhost:3306/blog_production?charset=utf8mb4"
+                              "mysql+mysqlconnector://root:123456@localhost:3306/blog_production?charset=utf8mb4"
 
     # 应用出错时发送电子邮件
     @classmethod
